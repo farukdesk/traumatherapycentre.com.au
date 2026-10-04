@@ -5,6 +5,14 @@
 
 require_once __DIR__ . '/../config/database.php';
 
+/** Polyfill for PHP < 8.0. */
+if (!function_exists('str_starts_with')) {
+    function str_starts_with(string $haystack, string $needle): bool
+    {
+        return $needle === '' || strncmp($haystack, $needle, strlen($needle)) === 0;
+    }
+}
+
 /** HTML-escape a value for safe output. */
 function e(?string $value): string
 {
