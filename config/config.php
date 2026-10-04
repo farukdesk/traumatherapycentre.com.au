@@ -5,9 +5,9 @@
  */
 
 define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_NAME', getenv('DB_NAME') ?: 'traumatherapy');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '');
+define('DB_NAME', getenv('DB_NAME') ?: 'pmrebigpond_TT202634');
+define('DB_USER', getenv('DB_USER') ?: 'pmrebigpond_tt9384');
+define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : '={#n07W7nwr$KX&Q');
 define('DB_CHARSET', 'utf8mb4');
 
 define('SITE_URL', getenv('SITE_URL') ?: '');
