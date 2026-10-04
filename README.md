@@ -37,7 +37,9 @@ A fully functional, database-driven website built with **raw PHP**, **MySQL** an
    ```bash
    mysql -u root -p < database/schema.sql
    ```
-3. **Configure credentials** in `config/config.php`, or set environment variables `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`.
+3. **Configure credentials** — do **not** hardcode them in `config/config.php`. Either:
+   - Set environment variables `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS` (e.g. in your hosting control panel or Apache/PHP-FPM config), **or**
+   - Copy `config/config.local.example.php` to `config/config.local.php` and fill in your values. This file is gitignored and never committed.
 4. **Serve the site** (document root = project root). For a quick local run:
    ```bash
    php -S localhost:8000
