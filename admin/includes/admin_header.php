@@ -21,6 +21,7 @@ $currentTable = $_GET['table'] ?? '';
     </div>
     <nav>
       <a href="index.php" class="<?= $currentPage === 'index.php' ? 'active' : '' ?>">Dashboard</a>
+      <a href="bookings.php" class="<?= $currentPage === 'bookings.php' ? 'active' : '' ?>">Bookings</a>
       <a href="settings.php" class="<?= $currentPage === 'settings.php' ? 'active' : '' ?>">Site Settings</a>
       <?php foreach (admin_tables() as $key => $def): ?>
       <a href="manage.php?table=<?= e($key) ?>" class="<?= $currentPage === 'manage.php' && $currentTable === $key ? 'active' : '' ?>"><?= e($def['label']) ?></a>

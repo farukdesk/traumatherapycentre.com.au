@@ -8,6 +8,8 @@ $counts = [];
 foreach (admin_tables() as $key => $def) {
     $counts[$key] = (int) db()->query("SELECT COUNT(*) FROM `$key`")->fetchColumn();
 }
+$bookingTotal = (int) db()->query('SELECT COUNT(*) FROM bookings')->fetchColumn();
+$bookingNew = (int) db()->query("SELECT COUNT(*) FROM bookings WHERE status = 'new'")->fetchColumn();
 
 require __DIR__ . '/includes/admin_header.php';
 ?>
@@ -15,6 +17,10 @@ require __DIR__ . '/includes/admin_header.php';
 <p class="muted">Welcome back, <?= e(current_admin()['username'] ?? '') ?>. Manage every section of the website from here.</p>
 
 <div class="cards">
+  <a class="card" href="bookings.php">
+    <h3>Bookings</h3>
+    <p><?= $bookingTotal ?> booking<?= $bookingTotal === 1 ? '' : 's' ?><?= $bookingNew > 0 ? ' · ' . $bookingNew . ' new' : '' ?></p>
+  </a>
   <a class="card" href="settings.php">
     <h3>Site Settings</h3>
     <p>Headings, hero, fees, footer &amp; all page text</p>

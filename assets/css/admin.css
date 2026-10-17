@@ -101,3 +101,9 @@ form.inline{display:inline}
   .sidebar-toggle{display:block}
   .admin-main{padding:70px 18px 30px}
 }
+
+/* ---------- bookings ---------- */
+.booking-filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.booking-filters .pill{display:inline-block;text-decoration:none}
+.data-table .booking-msg{max-width:260px;font-size:.84rem;color:var(--muted)}
+.data-table select{padding:7px 10px;border-radius:8px;font-size:.84rem;width:auto}

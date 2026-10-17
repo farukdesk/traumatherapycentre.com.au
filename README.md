@@ -6,11 +6,15 @@ A fully functional, database-driven website built with **raw PHP**, **MySQL** an
 
 ```
 ├── index.php                 # Public homepage (all content pulled from MySQL)
+├── book.php                  # Public booking page (in-house booking system)
 ├── config/
 │   ├── config.php            # DB credentials (env-var aware) + session setup
 │   └── database.php          # PDO connection (singleton)
 ├── includes/
 │   ├── functions.php         # Helpers: settings, escaping, CSRF, rendering
+│   ├── booking.php           # Booking validation, storage & notifications
+│   ├── mailer.php            # HTML email helpers
+│   ├── sms.php               # SMS notifications (Twilio REST API)
 │   ├── header.php            # Site <head>, top bar, nav
 │   └── footer.php            # Footer + script include
 ├── assets/
@@ -22,12 +26,14 @@ A fully functional, database-driven website built with **raw PHP**, **MySQL** an
 │   ├── login.php / logout.php
 │   ├── auth.php              # Session auth guard
 │   ├── index.php             # Dashboard
+│   ├── bookings.php          # View & manage booking requests
 │   ├── settings.php          # Edit all site text/settings (grouped)
 │   ├── manage.php            # Generic CRUD for all content tables
 │   ├── password.php          # Change admin password
 │   └── includes/             # Admin layout + table definitions
 └── database/
-    └── schema.sql            # Schema + full seed data
+    ├── schema.sql            # Schema + full seed data
+    └── upgrade_bookings.sql  # Upgrade for existing DBs: bookings table + settings
 ```
 
 ## Setup
@@ -45,6 +51,19 @@ A fully functional, database-driven website built with **raw PHP**, **MySQL** an
    php -S localhost:8000
    ```
 
+## Booking system
+
+The site has its own booking system — no third-party booking service required.
+
+- Visitors book via `/book.php` (name, email, phone, in-person/telehealth, preferred date & time, message). Spam-protected with CSRF + honeypot.
+- Every booking is stored in the `bookings` table and shown in **Admin → Bookings** with status workflow (New → Confirmed → Completed / Cancelled).
+- **Email notification:** set *Notification email* in *Site Settings → Booking Page & Notifications* to receive an email for each booking. The client also receives a confirmation email.
+- **SMS notification:** fill in the Twilio *Account SID*, *Auth Token*, *From number* and your *Notification mobile* in the same settings group. SMS is skipped silently if not configured.
+- **Existing databases:** run the upgrade script once:
+  ```bash
+  mysql -u root -p < database/upgrade_bookings.sql
+  ```
+
 ## Admin dashboard
 
 - URL: `/admin/`
@@ -55,6 +74,7 @@ From the dashboard you can control:
 | Area | What it edits |
 |---|---|
 | Site Settings | Every heading, paragraph, price, URL, footer & crisis text (grouped by section) |
+| Bookings | All booking requests from the website — filter by status, confirm/complete/cancel, delete |
 | Therapy Types | Accordion items (title, subtitle, body) |
 | Gold Standards | EMDR / TF-CBT rows |
 | Fee / Appointment Cards | The four info cards incl. reminder timeline & warning flags |
