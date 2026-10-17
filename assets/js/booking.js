@@ -17,6 +17,12 @@
   } catch (e) {
     fullDates = [];
   }
+  let fullSlots = {};
+  try {
+    fullSlots = JSON.parse(schedule.dataset.fullSlots || '{}') || {};
+  } catch (e) {
+    fullSlots = {};
+  }
   const hasSlots = Object.keys(availability).some((k) => (availability[k] || []).length);
   if (!hasSlots) return; // nothing to build a calendar from
 
@@ -56,8 +62,17 @@
   const pad = (n) => (n < 10 ? '0' + n : '' + n);
   const iso = (d) => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 
+  const normTime = (t) => t.toLowerCase().replace(/\s+/g, '');
+
+  function isSlotFull(isoStr, t) {
+    return (fullSlots[isoStr] || []).indexOf(normTime(t)) !== -1;
+  }
+
   function isAvailable(d) {
-    return d >= today && (availability[d.getDay()] || []).length > 0 && fullDates.indexOf(iso(d)) === -1;
+    if (d < today || fullDates.indexOf(iso(d)) !== -1) return false;
+    const slots = availability[d.getDay()] || [];
+    if (!slots.length) return false;
+    return slots.some((t) => !isSlotFull(iso(d), t));
   }
 
   function prettyDate(isoStr) {
@@ -88,17 +103,23 @@
     const slots = availability[d.getDay()] || [];
     slotsHead.textContent = prettyDate(selectedDate);
     slots.forEach((t) => {
+      const full = isSlotFull(selectedDate, t);
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'bk-slot' + (t === selectedTime ? ' selected' : '');
+      b.className = 'bk-slot' + (t === selectedTime ? ' selected' : '') + (full ? ' bk-slot-full' : '');
       b.setAttribute('role', 'option');
       b.setAttribute('aria-selected', t === selectedTime ? 'true' : 'false');
       b.textContent = t;
-      b.addEventListener('click', () => {
-        selectedTime = t;
-        timeInput.value = t;
-        renderSlots();
-      });
+      if (full) {
+        b.disabled = true;
+        b.setAttribute('aria-label', t + ', fully booked');
+      } else {
+        b.addEventListener('click', () => {
+          selectedTime = t;
+          timeInput.value = t;
+          renderSlots();
+        });
+      }
       slotList.appendChild(b);
     });
     updateSummary();
@@ -162,7 +183,7 @@
       viewYear = d.getFullYear();
       viewMonth = d.getMonth();
       const slots = availability[d.getDay()] || [];
-      if (slots.indexOf(timeInput.value) !== -1) selectedTime = timeInput.value;
+      if (slots.indexOf(timeInput.value) !== -1 && !isSlotFull(selectedDate, timeInput.value)) selectedTime = timeInput.value;
     }
   }
 

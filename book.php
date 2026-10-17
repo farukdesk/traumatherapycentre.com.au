@@ -27,6 +27,9 @@ $submitted = isset($_GET['sent']);
 $availability = booking_session_times();
 $calendarDays = booking_calendar_days();
 $fullDates = booking_full_dates();
+$fullSlots = booking_full_slots();
+$breakMessage = booking_break_message();
+$hasSlots = (bool) array_filter($calendarDays);
 
 require __DIR__ . '/includes/header.php';
 ?>
@@ -43,6 +46,18 @@ require __DIR__ . '/includes/header.php';
     <div class="booking-card booking-success rv">
       <h3>Thank you — your request has been received.</h3>
       <p>A confirmation email is on its way to you, and your appointment will be confirmed by email or phone shortly.</p>
+      <a href="index.php" class="btn btn-dark">Back to home <span class="arr"></span></a>
+    </div>
+    <?php elseif ($breakMessage !== ''): ?>
+    <div class="booking-card booking-success booking-notice rv">
+      <h3>Bookings are paused</h3>
+      <p><?= e($breakMessage) ?></p>
+      <a href="index.php" class="btn btn-dark">Back to home <span class="arr"></span></a>
+    </div>
+    <?php elseif (!$hasSlots): ?>
+    <div class="booking-card booking-success booking-notice rv">
+      <h3>No slots available</h3>
+      <p>Sorry, currently there is no slot available at this moment. Please check back soon.</p>
       <a href="index.php" class="btn btn-dark">Back to home <span class="arr"></span></a>
     </div>
     <?php else: ?>
@@ -76,7 +91,7 @@ require __DIR__ . '/includes/header.php';
           <?php if (isset($errors['email'])): ?><span class="bf-error"><?= e($errors['email']) ?></span><?php endif; ?>
         </div>
 
-        <div class="bf-field bf-schedule" id="bk-schedule" data-availability="<?= e(json_encode($calendarDays)) ?>" data-full-dates="<?= e(json_encode($fullDates)) ?>" data-today="<?= e(date('Y-m-d')) ?>">
+        <div class="bf-field bf-schedule" id="bk-schedule" data-availability="<?= e(json_encode($calendarDays)) ?>" data-full-dates="<?= e(json_encode($fullDates)) ?>" data-full-slots="<?= e(json_encode($fullSlots)) ?>" data-today="<?= e(date('Y-m-d')) ?>">
           <span class="bf-label">Preferred date &amp; time *</span>
 
           <div class="bk-picker" id="bk-picker" hidden>

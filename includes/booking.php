@@ -41,10 +41,11 @@ function booking_schedule(): array
     try {
         foreach (db()->query('SELECT * FROM booking_schedule ORDER BY weekday') as $row) {
             $schedule[(int) $row['weekday']] = [
-                'is_open'      => (int) $row['is_open'] === 1,
-                'start_time'   => substr($row['start_time'], 0, 5),
-                'end_time'     => substr($row['end_time'], 0, 5),
-                'slot_minutes' => max(5, (int) $row['slot_minutes']),
+                'is_open'       => (int) $row['is_open'] === 1,
+                'start_time'    => substr($row['start_time'], 0, 5),
+                'end_time'      => substr($row['end_time'], 0, 5),
+                'slot_minutes'  => max(5, (int) $row['slot_minutes']),
+                'slot_capacity' => max(1, (int) ($row['slot_capacity'] ?? 1)),
             ];
         }
     } catch (PDOException $e) {
@@ -157,6 +158,51 @@ function booking_session_times(): array
     return $rows;
 }
 
+/** Normalise a time label for comparisons: lowercase, no whitespace ('9:00am'). */
+function booking_normalise_time(string $time): string
+{
+    return preg_replace('/\s+/', '', strtolower($time));
+}
+
+/**
+ * Admin-set break message. Returns the custom message when the break is
+ * switched on in Admin → Availability, otherwise an empty string.
+ */
+function booking_break_message(): string
+{
+    if (setting('booking_break_enabled', '0') !== '1') {
+        return '';
+    }
+    $message = trim(setting('booking_break_message'));
+    return $message !== ''
+        ? $message
+        : 'Sorry, bookings are paused at the moment. Please check back soon.';
+}
+
+/**
+ * Upcoming time slots that have reached their per-slot capacity:
+ * 'Y-m-d' date => list of normalised time labels (see booking_normalise_time).
+ */
+function booking_full_slots(): array
+{
+    $schedule = booking_schedule();
+    $stmt = db()->query(
+        "SELECT preferred_date, preferred_time, COUNT(*) AS cnt FROM bookings
+         WHERE status <> 'cancelled' AND preferred_date >= CURDATE()
+         GROUP BY preferred_date, preferred_time"
+    );
+    $full = [];
+    foreach ($stmt as $row) {
+        $date = $row['preferred_date'];
+        $weekday = (int) date('w', strtotime($date));
+        $capacity = $schedule[$weekday]['slot_capacity'] ?? 1;
+        if ((int) $row['cnt'] >= $capacity) {
+            $full[$date][] = booking_normalise_time($row['preferred_time']);
+        }
+    }
+    return $full;
+}
+
 /** Upcoming dates that have reached the daily booking limit ('Y-m-d' strings). */
 function booking_full_dates(): array
 {
@@ -181,6 +227,10 @@ function booking_full_dates(): array
 function booking_validate_availability(array $data): array
 {
     $errors = [];
+    if (booking_break_message() !== '') {
+        $errors['preferred_date'] = 'Bookings are temporarily paused — please check back soon.';
+        return $errors;
+    }
     $date = DateTime::createFromFormat('Y-m-d', $data['preferred_date']);
     if (!$date || $date->format('Y-m-d') !== $data['preferred_date']) {
         return $errors; // format problems are reported by booking_validate()
@@ -193,12 +243,13 @@ function booking_validate_availability(array $data): array
     } elseif (in_array($data['preferred_date'], booking_full_dates(), true)) {
         $errors['preferred_date'] = 'That day is fully booked — please choose another date.';
     } elseif ($hasSlots) {
-        $normalise = static function (string $t): string {
-            return preg_replace('/\s+/', '', strtolower($t));
-        };
-        $valid = array_map($normalise, $calendarDays[$dow]);
-        if (!in_array($normalise($data['preferred_time']), $valid, true)) {
+        $valid = array_map('booking_normalise_time', $calendarDays[$dow]);
+        $chosen = booking_normalise_time($data['preferred_time']);
+        $fullSlots = booking_full_slots();
+        if (!in_array($chosen, $valid, true)) {
             $errors['preferred_time'] = 'Please choose one of the available time slots for that day.';
+        } elseif (in_array($chosen, $fullSlots[$data['preferred_date']] ?? [], true)) {
+            $errors['preferred_time'] = 'That time slot is fully booked — please choose another time.';
         }
     }
     return $errors;

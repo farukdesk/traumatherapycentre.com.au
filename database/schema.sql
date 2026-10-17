@@ -274,17 +274,18 @@ CREATE TABLE IF NOT EXISTS booking_schedule (
   start_time TIME NOT NULL DEFAULT '09:00:00',
   end_time TIME NOT NULL DEFAULT '13:00:00',
   slot_minutes SMALLINT UNSIGNED NOT NULL DEFAULT 60,
+  slot_capacity SMALLINT UNSIGNED NOT NULL DEFAULT 1,
   PRIMARY KEY (weekday)
 ) ENGINE=InnoDB;
 
-INSERT INTO booking_schedule (weekday, is_open, start_time, end_time, slot_minutes) VALUES
-(0, 0, '09:00:00', '13:00:00', 60),
-(1, 0, '09:00:00', '13:00:00', 60),
-(2, 1, '09:00:00', '13:00:00', 60),
-(3, 0, '09:00:00', '13:00:00', 60),
-(4, 1, '09:00:00', '13:00:00', 60),
-(5, 0, '09:00:00', '13:00:00', 60),
-(6, 1, '09:00:00', '13:00:00', 60);
+INSERT INTO booking_schedule (weekday, is_open, start_time, end_time, slot_minutes, slot_capacity) VALUES
+(0, 0, '09:00:00', '13:00:00', 60, 1),
+(1, 0, '09:00:00', '13:00:00', 60, 1),
+(2, 1, '09:00:00', '13:00:00', 60, 1),
+(3, 0, '09:00:00', '13:00:00', 60, 1),
+(4, 1, '09:00:00', '13:00:00', 60, 1),
+(5, 0, '09:00:00', '13:00:00', 60, 1),
+(6, 1, '09:00:00', '13:00:00', 60, 1);
 
 -- ---------------------------------------------------------------- bookings
 CREATE TABLE IF NOT EXISTS bookings (
