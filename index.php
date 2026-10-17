@@ -41,9 +41,10 @@ require __DIR__ . '/includes/header.php';
     </div>
 
     <?php if ($heroStats): ?>
-    <div class="hero-foot rv">
+    <!-- TODO: Consider replacing '2 gold-standard therapies' with a stronger stat. -->
+    <div class="hero-foot rv" data-stats>
       <?php foreach ($heroStats as $stat): ?>
-      <div><b class="numeral-display"><?= e($stat['stat_value']) ?></b><span><?= e($stat['stat_label']) ?></span></div>
+      <div><b class="numeral-display" data-count="<?= e($stat['stat_value']) ?>"><?= e($stat['stat_value']) ?></b><span><?= e($stat['stat_label']) ?></span></div>
       <?php endforeach; ?>
     </div>
     <?php endif; ?>
