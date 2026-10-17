@@ -8,14 +8,18 @@ USE traumatherapy;
 CREATE TABLE IF NOT EXISTS admins (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   username VARCHAR(60) NOT NULL UNIQUE,
+  email VARCHAR(190) NOT NULL DEFAULT '',
   password_hash VARCHAR(255) NOT NULL,
+  reset_token_hash VARCHAR(64) DEFAULT NULL,
+  reset_token_expires DATETIME DEFAULT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
 -- Default login: admin / admin123  (CHANGE THIS after first login!)
-INSERT INTO admins (username, password_hash) VALUES
-('admin', '$2y$10$0DTLXbIkWu/beoX487TEkOHG2ksRsdKPiAqxJZuOBNGfIK146hu0y');
+-- Set a real email address to enable the "forgot password" feature.
+INSERT INTO admins (username, email, password_hash) VALUES
+('admin', '', '$2y$10$0DTLXbIkWu/beoX487TEkOHG2ksRsdKPiAqxJZuOBNGfIK146hu0y');
 
 -- ---------------------------------------------------------------- settings
 CREATE TABLE IF NOT EXISTS settings (
