@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="password" id="password" name="password" required autocomplete="current-password">
     <button type="submit" class="btn-primary">Sign in</button>
   </form>
+  <a class="back-link" href="forgot_password.php">Forgot your password?</a>
   <a class="back-link" href="../index.php">← Back to website</a>
 </div>
 </body>
