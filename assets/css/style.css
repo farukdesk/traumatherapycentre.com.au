@@ -296,3 +296,33 @@ footer a:hover{color:#fff}
   .cta-box{padding:70px 24px;border-radius:28px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}.hero h1 .ln span{transform:none}}
+
+/* ---------- booking page ---------- */
+.booking-section{padding:120px 0}
+.booking-head{max-width:640px;margin-bottom:48px}
+.booking-head h2{font-family:var(--serif);font-weight:350;font-size:clamp(2.2rem,4vw,3.4rem);margin:18px 0 14px}
+.booking-sub{color:var(--muted);font-size:1.05rem}
+.booking-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:28px;align-items:start}
+.booking-card{background:var(--cream);border:1px solid var(--line);border-radius:22px;padding:40px 36px}
+.booking-form .bf-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.bf-field{margin-bottom:18px}
+.bf-field label,.bf-field .bf-label{display:block;font-size:.85rem;font-weight:500;letter-spacing:.02em;margin-bottom:7px;color:var(--plum-deep)}
+.bf-field input[type=text],.bf-field input[type=tel],.bf-field input[type=email],.bf-field input[type=date],.bf-field textarea{
+  width:100%;padding:13px 16px;border:1px solid var(--line);border-radius:12px;background:#fff;font:inherit;font-size:.95rem;color:var(--ink)}
+.bf-field input:focus,.bf-field textarea:focus{outline:2px solid var(--plum);outline-offset:1px;border-color:transparent}
+.bf-radios{display:flex;gap:22px;padding:6px 2px}
+.bf-radios label{display:inline-flex;align-items:center;gap:8px;font-weight:400;margin:0;cursor:pointer}
+.bf-error{display:block;margin-top:6px;font-size:.82rem;color:#a94436}
+.booking-errors{background:#f7e2df;color:#a94436;border-radius:12px;padding:13px 16px;margin-bottom:20px;font-size:.92rem}
+.booking-form .btn{border:0;cursor:pointer;font:inherit;margin-top:6px}
+.hp-field{position:absolute;left:-9999px;top:-9999px}
+.booking-aside h3{font-family:var(--serif);font-weight:400;font-size:1.3rem;margin-bottom:18px}
+.booking-hours{margin-bottom:20px}
+.booking-hours li{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.booking-hours li:last-child{border-bottom:0}
+.booking-note{color:var(--muted);font-size:.88rem;margin-top:12px}
+.booking-success{text-align:center;max-width:560px;margin:0 auto;padding:60px 40px}
+.booking-success h3{font-family:var(--serif);font-weight:400;font-size:1.6rem;margin-bottom:12px}
+.booking-success p{color:var(--muted);margin-bottom:26px}
+@media (max-width:980px){.booking-grid{grid-template-columns:1fr}}
+@media (max-width:640px){.booking-card{padding:30px 22px}.booking-form .bf-row{grid-template-columns:1fr}}

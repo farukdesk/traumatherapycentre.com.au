@@ -14,6 +14,15 @@ $groups = [
         'topbar_left'      => ['Top bar — left text', 'text'],
         'topbar_right'     => ['Top bar — right text', 'text'],
     ],
+    'Booking Page & Notifications' => [
+        'booking_heading'      => ['Booking page heading', 'text'],
+        'booking_sub'          => ['Booking page subheading', 'textarea'],
+        'booking_notify_email' => ['Notification email (new bookings)', 'text'],
+        'booking_notify_sms'   => ['Notification mobile for SMS (e.g. +614…)', 'text'],
+        'twilio_sid'           => ['Twilio Account SID', 'text'],
+        'twilio_token'         => ['Twilio Auth Token', 'password'],
+        'twilio_from'          => ['Twilio From number (e.g. +614…)', 'text'],
+    ],
     'Hero' => [
         'hero_kicker_b'    => ['Kicker word', 'text'],
         'hero_kicker_text' => ['Kicker text', 'text'],
@@ -111,6 +120,8 @@ require __DIR__ . '/includes/admin_header.php';
         <label for="<?= e($key) ?>"><?= e($label) ?></label>
         <?php if ($type === 'textarea'): ?>
         <textarea id="<?= e($key) ?>" name="<?= e($key) ?>" rows="3"><?= e(setting($key)) ?></textarea>
+        <?php elseif ($type === 'password'): ?>
+        <input type="password" id="<?= e($key) ?>" name="<?= e($key) ?>" value="<?= e(setting($key)) ?>" autocomplete="new-password">
         <?php else: ?>
         <input type="text" id="<?= e($key) ?>" name="<?= e($key) ?>" value="<?= e(setting($key)) ?>">
         <?php endif; ?>

@@ -33,7 +33,14 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('meta_description', 'Trauma therapy with Patricia — trained in EMDR and TF-CBT, the two gold standards of trauma treatment. Medicare, DVA, NDIS and telehealth available.'),
 ('logo_url', 'https://traumatherapycentre.com.au/wp-content/uploads/2020/04/cropped-preview6.png'),
 ('favicon_url', 'https://traumatherapycentre.com.au/wp-content/uploads/2020/04/cropped-preview6.png'),
-('booking_url', 'https://calendly.com/pmre-1'),
+('booking_url', 'book.php'),
+('booking_heading', 'Book your <em>appointment.</em>'),
+('booking_sub', 'Fill in the form below and I''ll confirm your session by email or phone as soon as possible.'),
+('booking_notify_email', ''),
+('booking_notify_sms', ''),
+('twilio_sid', ''),
+('twilio_token', ''),
+('twilio_from', ''),
 ('topbar_left', 'Sessions Tuesday · Thursday · Saturday'),
 ('topbar_right', 'In person & telehealth · Adults 18+'),
 ('hero_kicker_b', 'Welcome'),
@@ -256,3 +263,20 @@ INSERT INTO availability (day_label, hours_label, sort_order) VALUES
 ('Tuesday', '9:00 – 13:00', 1),
 ('Thursday', '9:00 – 13:00', 2),
 ('Saturday', '9:00 – 13:00', 3);
+
+-- ---------------------------------------------------------------- bookings
+CREATE TABLE IF NOT EXISTS bookings (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(190) NOT NULL,
+  phone VARCHAR(40) NOT NULL,
+  session_type ENUM('in_person','telehealth') NOT NULL DEFAULT 'in_person',
+  preferred_date DATE NOT NULL,
+  preferred_time VARCHAR(40) NOT NULL,
+  message TEXT NOT NULL,
+  status ENUM('new','confirmed','completed','cancelled') NOT NULL DEFAULT 'new',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_status (status),
+  KEY idx_created (created_at)
+) ENGINE=InnoDB;
