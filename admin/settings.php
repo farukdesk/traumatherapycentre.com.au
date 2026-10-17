@@ -17,6 +17,7 @@ $groups = [
     'Booking Page & Notifications' => [
         'booking_heading'      => ['Booking page heading', 'text'],
         'booking_sub'          => ['Booking page subheading', 'textarea'],
+        'booking_daily_limit'  => ['Max bookings per day (0 = unlimited; day is blocked once reached)', 'text'],
         'booking_notify_email' => ['Notification email (new bookings)', 'text'],
         'booking_notify_sms'   => ['Notification mobile for SMS (e.g. +614…)', 'text'],
         'twilio_sid'           => ['Twilio Account SID', 'text'],

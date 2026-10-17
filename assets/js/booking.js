@@ -11,6 +11,12 @@
   } catch (e) {
     return; // fall back to native inputs
   }
+  let fullDates = [];
+  try {
+    fullDates = JSON.parse(schedule.dataset.fullDates || '[]') || [];
+  } catch (e) {
+    fullDates = [];
+  }
   const hasSlots = Object.keys(availability).some((k) => (availability[k] || []).length);
   if (!hasSlots) return; // nothing to build a calendar from
 
@@ -51,7 +57,7 @@
   const iso = (d) => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 
   function isAvailable(d) {
-    return d >= today && (availability[d.getDay()] || []).length > 0;
+    return d >= today && (availability[d.getDay()] || []).length > 0 && fullDates.indexOf(iso(d)) === -1;
   }
 
   function prettyDate(isoStr) {

@@ -38,6 +38,7 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('booking_sub', 'Fill in the form below and I''ll confirm your session by email or phone as soon as possible.'),
 ('booking_notify_email', ''),
 ('booking_notify_sms', ''),
+('booking_daily_limit', '0'),
 ('twilio_sid', ''),
 ('twilio_token', ''),
 ('twilio_from', ''),

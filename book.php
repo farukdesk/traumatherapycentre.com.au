@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     [$data, $errors] = booking_validate($_POST);
+    $errors += booking_validate_availability($data);
     if (!$errors) {
         $bookingId = booking_create($data);
         booking_notify($data, $bookingId);
@@ -24,37 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $submitted = isset($_GET['sent']);
 $availability = get_rows('availability');
-
-// Map availability rows to calendar data: weekday (0=Sun..6=Sat) => hourly time slots.
-$dayMap = [
-    'sunday' => 0, 'monday' => 1, 'tuesday' => 2, 'wednesday' => 3,
-    'thursday' => 4, 'friday' => 5, 'saturday' => 6,
-];
-$calendarDays = [];
-foreach ($availability as $slot) {
-    $day = strtolower(trim($slot['day_label']));
-    if (!isset($dayMap[$day])) {
-        continue;
-    }
-    $times = [];
-    if (preg_match('/(\d{1,2}):(\d{2})\s*(am|pm)?\s*[\x{2013}\x{2014}-]\s*(\d{1,2}):(\d{2})\s*(am|pm)?/iu', $slot['hours_label'], $m)) {
-        $startH = (int) $m[1];
-        if (strtolower($m[3] ?? '') === 'pm' && $startH < 12) {
-            $startH += 12;
-        }
-        $endH = (int) $m[4];
-        if (strtolower($m[6] ?? '') === 'pm' && $endH < 12) {
-            $endH += 12;
-        }
-        $start = $startH * 60 + (int) $m[2];
-        $end = $endH * 60 + (int) $m[5];
-        for ($t = $start; $t + 60 <= $end; $t += 60) {
-            $h = intdiv($t, 60);
-            $times[] = sprintf('%d:%02d %s', $h % 12 ?: 12, $t % 60, $h < 12 ? 'am' : 'pm');
-        }
-    }
-    $calendarDays[$dayMap[$day]] = $times;
-}
+$calendarDays = booking_calendar_days();
+$fullDates = booking_full_dates();
 
 require __DIR__ . '/includes/header.php';
 ?>
@@ -104,7 +76,7 @@ require __DIR__ . '/includes/header.php';
           <?php if (isset($errors['email'])): ?><span class="bf-error"><?= e($errors['email']) ?></span><?php endif; ?>
         </div>
 
-        <div class="bf-field bf-schedule" id="bk-schedule" data-availability="<?= e(json_encode($calendarDays)) ?>" data-today="<?= e(date('Y-m-d')) ?>">
+        <div class="bf-field bf-schedule" id="bk-schedule" data-availability="<?= e(json_encode($calendarDays)) ?>" data-full-dates="<?= e(json_encode($fullDates)) ?>" data-today="<?= e(date('Y-m-d')) ?>">
           <span class="bf-label">Preferred date &amp; time *</span>
 
           <div class="bk-picker" id="bk-picker" hidden>
@@ -179,5 +151,5 @@ require __DIR__ . '/includes/header.php';
   </div>
 </section>
 
-<script src="assets/js/booking.js" defer></script>
+<script src="assets/js/booking.js?v=<?= filemtime(__DIR__ . '/assets/js/booking.js') ?>" defer></script>
 <?php require __DIR__ . '/includes/footer.php'; ?>
