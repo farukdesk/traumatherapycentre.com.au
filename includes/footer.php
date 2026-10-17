@@ -1,6 +1,16 @@
 <?php
 $footerSessionDays  = booking_open_days_label(true) ?: setting('footer_sessions_days');
 $footerSessionHours = booking_session_hours_label() ?: setting('footer_sessions_hours');
+
+/** Wrap crisis phone numbers (000, Lifeline 13 11 14) in tel: links. */
+if (!function_exists('crisis_tel_links')) {
+    function crisis_tel_links(string $html): string
+    {
+        return preg_replace_callback('/\b(000|13\s?11\s?14)\b/', function ($m) {
+            return '<a href="tel:' . preg_replace('/\s+/', '', $m[1]) . '">' . $m[1] . '</a>';
+        }, $html);
+    }
+}
 ?>
 <footer>
   <div class="wrap">
@@ -34,14 +44,14 @@ $footerSessionHours = booking_session_hours_label() ?: setting('footer_sessions_
       </div>
     </div>
     <div class="crisis">
-      <span><?= rich(setting('crisis_line1')) ?></span>
-      <span><?= rich(setting('crisis_line2')) ?></span>
+      <span><?= crisis_tel_links(rich(setting('crisis_line1'))) ?></span>
+      <span><?= crisis_tel_links(rich(setting('crisis_line2'))) ?></span>
     </div>
-    <div class="big-word"><?= e(setting('footer_big_word')) ?></div>
     <div class="fbot">
       <span><?= e(setting('footer_copyright')) ?></span>
       <span><?= e(setting('footer_credit')) ?></span>
     </div>
+    <div class="big-word" aria-hidden="true"><?= e(setting('footer_big_word')) ?></div>
   </div>
 </footer>
 

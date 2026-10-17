@@ -107,4 +107,103 @@
         });
     })
   );
+
+  // Accessible disclosures (therapy card "Read more" + FAQ accordion)
+  document.querySelectorAll('button[aria-controls]').forEach((btn) => {
+    const panel = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!panel || !panel.classList.contains('disclose')) return;
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      panel.classList.toggle('open', !open);
+      const label = btn.getAttribute(open ? 'data-more' : 'data-less');
+      if (label) btn.textContent = label;
+    });
+  });
+
+  // Gentle parallax for decorative circles (max px in data-parallax)
+  const parallaxEls = document.querySelectorAll('[data-parallax]');
+  if (parallaxEls.length && !reduceMotion && !coarse) {
+    let pRaf = 0;
+    const applyParallax = () => {
+      pRaf = 0;
+      parallaxEls.forEach((el) => {
+        const max = parseInt(el.getAttribute('data-parallax'), 10) || 30;
+        const rect = el.parentElement.getBoundingClientRect();
+        const p = (rect.top + rect.height / 2 - window.innerHeight / 2) / window.innerHeight;
+        const y = Math.max(-max, Math.min(max, p * -max));
+        el.style.transform = 'translateY(' + y + 'px)';
+      });
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!pRaf) pRaf = requestAnimationFrame(applyParallax);
+      },
+      { passive: true }
+    );
+    applyParallax();
+  }
+
+  // Sticky therapy cards: dim + scale card 01 as card 02 slides over it
+  const goldCards = document.querySelectorAll('.gold-stack .gold-row');
+  if (goldCards.length > 1 && !reduceMotion) {
+    let gRaf = 0;
+    const updateCovered = () => {
+      gRaf = 0;
+      goldCards.forEach((card, i) => {
+        const next = goldCards[i + 1];
+        if (!next) return;
+        const covered = next.getBoundingClientRect().top < card.getBoundingClientRect().bottom - 40;
+        card.classList.toggle('covered', covered);
+      });
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!gRaf) gRaf = requestAnimationFrame(updateCovered);
+      },
+      { passive: true }
+    );
+  }
+
+  // Quote: word-by-word reveal (40ms stagger); full opacity under reduced motion
+  const quoteEl = document.querySelector('[data-words]');
+  if (quoteEl && !reduceMotion && 'IntersectionObserver' in window) {
+    const wrapWords = (node) => {
+      Array.from(node.childNodes).forEach((child) => {
+        if (child.nodeType === Node.TEXT_NODE) {
+          const frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach((part) => {
+            if (/^\s*$/.test(part)) {
+              frag.appendChild(document.createTextNode(part));
+            } else {
+              const span = document.createElement('span');
+              span.className = 'w';
+              span.textContent = part;
+              frag.appendChild(span);
+            }
+          });
+          node.replaceChild(frag, child);
+        } else if (child.nodeType === Node.ELEMENT_NODE) {
+          wrapWords(child);
+        }
+      });
+    };
+    wrapWords(quoteEl);
+    quoteEl.querySelectorAll('.w').forEach((w, i) => {
+      w.style.setProperty('--w-delay', i * 40 + 'ms');
+    });
+    const qIo = new IntersectionObserver(
+      (es, obs) =>
+        es.forEach((e) => {
+          if (e.isIntersecting) {
+            quoteEl.classList.add('words-in');
+            obs.disconnect();
+          }
+        }),
+      { threshold: 0.4 }
+    );
+    qIo.observe(quoteEl);
+  }
 })();
