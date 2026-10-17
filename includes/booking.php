@@ -320,6 +320,7 @@ function booking_validate(array $input): array
         'preferred_date' => trim((string) ($input['preferred_date'] ?? '')),
         'preferred_time' => trim((string) ($input['preferred_time'] ?? '')),
         'message'        => trim((string) ($input['message'] ?? '')),
+        'age_confirm'    => !empty($input['age_confirm']),
     ];
 
     if ($data['name'] === '' || mb_strlen($data['name']) > 120) {
@@ -344,6 +345,9 @@ function booking_validate(array $input): array
     }
     if (mb_strlen($data['message']) > 2000) {
         $errors['message'] = 'Message is too long (max 2000 characters).';
+    }
+    if (!$data['age_confirm']) {
+        $errors['age_confirm'] = 'Please confirm that you are 18 years or older.';
     }
 
     return [$data, $errors];
