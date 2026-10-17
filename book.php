@@ -148,6 +148,11 @@ require __DIR__ . '/includes/header.php';
           <?php if (isset($errors['message'])): ?><span class="bf-error"><?= e($errors['message']) ?></span><?php endif; ?>
         </div>
 
+        <div class="bf-field bf-check">
+          <label><input type="checkbox" name="age_confirm" value="1" required <?= !empty($old['age_confirm']) ? 'checked' : '' ?>> I confirm that I am 18 years or older. You must be 18 years or older to receive assistance from me. *</label>
+          <?php if (isset($errors['age_confirm'])): ?><span class="bf-error"><?= e($errors['age_confirm']) ?></span><?php endif; ?>
+        </div>
+
         <button type="submit" class="btn btn-dark">Request appointment <span class="arr"></span></button>
       </form>
 
