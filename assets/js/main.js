@@ -98,15 +98,90 @@
     );
   }
 
-  // One therapy accordion open at a time
-  document.querySelectorAll('.acc details').forEach((d) =>
-    d.addEventListener('toggle', () => {
-      if (d.open)
-        document.querySelectorAll('.acc details').forEach((o) => {
-          if (o !== d) o.open = false;
-        });
-    })
-  );
+  // Supporting therapies accordion — one open, hash deep-links, full keyboard pattern
+  const tacc = document.querySelector('.tacc');
+  if (tacc) {
+    const items = Array.from(tacc.querySelectorAll('.tacc-item'));
+    const buttons = items.map((it) => it.querySelector('.tacc-btn'));
+    const HEADER_OFFSET = 120;
+
+    const scrollToItem = (item) => {
+      const top = item.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+      window.scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
+    };
+
+    const closeItem = (item) => {
+      item.classList.remove('open');
+      item.querySelector('.tacc-btn').setAttribute('aria-expanded', 'false');
+    };
+
+    const openItem = (item, opts = {}) => {
+      items.forEach((other) => {
+        if (other !== item) closeItem(other);
+      });
+      item.classList.add('open');
+      item.querySelector('.tacc-btn').setAttribute('aria-expanded', 'true');
+      if (history.replaceState) history.replaceState(null, '', '#' + item.id);
+      if (opts.scroll) scrollToItem(item);
+      if (opts.focus) item.querySelector('.tacc-btn').focus();
+    };
+
+    buttons.forEach((btn, i) => {
+      const item = items[i];
+      btn.addEventListener('click', () => {
+        if (item.classList.contains('open')) {
+          closeItem(item);
+          if (history.replaceState)
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+        } else {
+          openItem(item);
+        }
+      });
+      // Up/Down/Home/End move focus between accordion headers
+      btn.addEventListener('keydown', (ev) => {
+        let target = null;
+        if (ev.key === 'ArrowDown') target = buttons[(i + 1) % buttons.length];
+        else if (ev.key === 'ArrowUp') target = buttons[(i - 1 + buttons.length) % buttons.length];
+        else if (ev.key === 'Home') target = buttons[0];
+        else if (ev.key === 'End') target = buttons[buttons.length - 1];
+        if (target) {
+          ev.preventDefault();
+          target.focus();
+        }
+      });
+    });
+
+    const openFromHash = (opts) => {
+      const slug = window.location.hash.replace(/^#/, '');
+      if (!slug) return false;
+      const item = items.find((it) => it.id === slug);
+      if (!item) return false;
+      openItem(item, opts);
+      return true;
+    };
+
+    // "Works well with" links (and any other in-page anchors to a therapy) open that panel
+    document.querySelectorAll('a[href^="#"]').forEach((a) => {
+      const slug = a.getAttribute('href').slice(1);
+      const item = items.find((it) => it.id === slug);
+      if (!item) return;
+      a.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        openItem(item, { scroll: true, focus: true });
+      });
+    });
+
+    window.addEventListener('hashchange', () => openFromHash({ scroll: true }));
+
+    // Deep link on load: open the panel and scroll to it with a 120px offset
+    // (after load so late layout shifts don't skew the position)
+    if (openFromHash({})) {
+      const current = items.find((it) => it.classList.contains('open'));
+      const settle = () => window.setTimeout(() => current && scrollToItem(current), 60);
+      if (document.readyState === 'complete') settle();
+      else window.addEventListener('load', settle, { once: true });
+    }
+  }
 
   // Accessible disclosures (therapy card "Read more" + FAQ accordion)
   document.querySelectorAll('button[aria-controls]').forEach((btn) => {
