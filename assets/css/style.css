@@ -321,6 +321,52 @@ footer a:hover{color:#fff}
 .booking-hours li{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.95rem}
 .booking-hours li:last-child{border-bottom:0}
 .booking-note{color:var(--muted);font-size:.88rem;margin-top:12px}
+
+/* ---------- interactive calendar picker ---------- */
+.bf-schedule{margin-bottom:22px}
+.bf-schedule [hidden],.bk-picker[hidden]{display:none!important}
+.bk-picker{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;transition:box-shadow .4s var(--ease)}
+.bk-picker.bk-attn{box-shadow:0 0 0 2px #a94436;animation:bk-shake .45s var(--ease)}
+@keyframes bk-shake{20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+.bk-cal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.bk-cal-title{font-family:var(--serif);font-size:1.08rem;color:var(--plum-deep)}
+.bk-nav{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--cream);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .3s var(--ease)}
+.bk-nav:hover:not(:disabled){background:var(--plum);border-color:var(--plum)}
+.bk-nav:hover:not(:disabled) .bk-chev{border-color:#fff}
+.bk-nav:disabled{opacity:.35;cursor:default}
+.bk-chev{width:8px;height:8px;border-top:2px solid var(--plum-deep);border-right:2px solid var(--plum-deep);border-radius:1px}
+.bk-chev-l{transform:rotate(-135deg);margin-left:3px}
+.bk-chev-r{transform:rotate(45deg);margin-right:3px}
+.bk-dow,.bk-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.bk-dow{margin-bottom:6px}
+.bk-dow span{text-align:center;font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:4px 0}
+.bk-day{height:42px;border:0;border-radius:12px;background:transparent;font:inherit;font-size:.92rem;color:var(--muted);display:flex;align-items:center;justify-content:center;position:relative;transition:all .3s var(--ease)}
+.bk-day:disabled{color:rgba(46,42,47,.28);cursor:default}
+.bk-day.today::after{content:"";position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--rose)}
+.bk-day.bk-avail{background:var(--sage-mist);color:var(--forest);font-weight:600;cursor:pointer}
+.bk-day.bk-avail:hover{background:var(--sage-soft);transform:translateY(-1px)}
+.bk-day.selected,.bk-day.selected:hover{background:var(--plum);color:#fff;box-shadow:0 10px 20px -10px rgba(116,48,94,.7)}
+.bk-legend{display:flex;gap:18px;margin-top:12px;font-size:.78rem;color:var(--muted)}
+.bk-legend span{display:inline-flex;align-items:center;gap:7px}
+.bk-dot{width:11px;height:11px;border-radius:4px;display:inline-block}
+.bk-dot-avail{background:var(--sage-mist);border:1px solid var(--sage)}
+.bk-dot-sel{background:var(--plum)}
+.bk-slots{display:flex;flex-direction:column;gap:12px;border-left:1px solid var(--line);padding-left:18px}
+.bk-slots-head{font-size:.9rem;font-weight:600;color:var(--plum-deep)}
+.bk-slot-list{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;align-content:start}
+.bk-slot{padding:12px 10px;border:1px solid var(--line);border-radius:12px;background:var(--cream);font:inherit;font-size:.92rem;font-weight:500;color:var(--plum-deep);cursor:pointer;transition:all .3s var(--ease)}
+.bk-slot:hover{border-color:var(--plum);transform:translateY(-1px)}
+.bk-slot.selected{background:var(--plum);border-color:var(--plum);color:#fff;box-shadow:0 10px 20px -10px rgba(116,48,94,.7)}
+.bk-summary{display:flex;align-items:center;gap:10px;margin-top:auto;padding:12px 14px;border-radius:12px;background:var(--sage-mist);color:var(--forest);font-size:.9rem;font-weight:500}
+.bk-summary-ico{width:22px;height:22px;flex:0 0 22px;border-radius:50%;background:var(--forest);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.72rem}
+@media (max-width:640px){
+  .bk-picker{grid-template-columns:1fr;padding:14px}
+  .bk-slots{border-left:0;border-top:1px solid var(--line);padding-left:0;padding-top:14px}
+  .bk-slot-list{grid-template-columns:repeat(2,1fr)}
+  .bk-day{height:44px;border-radius:10px}
+  .bk-slot{padding:13px 8px}
+}
+
 .booking-success{text-align:center;max-width:560px;margin:0 auto;padding:60px 40px}
 .booking-success h3{font-family:var(--serif);font-weight:400;font-size:1.6rem;margin-bottom:12px}
 .booking-success p{color:var(--muted);margin-bottom:26px}
