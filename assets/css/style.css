@@ -278,35 +278,88 @@ header.scrolled .logo img{height:46px}
 .quote-role{display:block;font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--plum);margin-top:3px}
 
 /* Fees */
+.fees-head h2{margin:26px 0 18px}
+.fees-head h2 em{color:var(--plum)}
+.fees-sub{color:var(--body);max-width:38ch}
+/* At-a-glance — compact hairline strip, same language as the homepage stats */
+.glance{display:grid;grid-template-columns:repeat(4,1fr);margin:48px 0 64px;border-block:1px solid var(--hairline-plum)}
+.glance > div{padding:22px 26px;border-left:1px solid var(--hairline-plum)}
+.glance > div:first-child{border-left:0;padding-left:0}
+.glance b{display:block;font-size:1.55rem;line-height:1.2;color:var(--plum);white-space:nowrap}
+.glance span{display:block;font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);margin-top:5px}
 .fees-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:80px;align-items:start}
 .fees-l{position:sticky;top:120px}
-.fees-l h2{margin:26px 0 44px}
-.fees-l h2 em{color:var(--plum)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .price{background:var(--cream);border-radius:var(--r);padding:46px 44px;box-shadow:var(--shadow);border:1px solid var(--line)}
+/* Segmented fee toggle — With / Without MHCP */
+.fee-toggle{display:inline-flex;gap:4px;padding:4px;margin-bottom:26px;border:1px solid var(--line);border-radius:100px;background:var(--linen)}
+.fee-toggle button{border:0;background:transparent;font:inherit;font-size:.85rem;font-weight:500;color:var(--muted);padding:9px 18px;border-radius:100px;cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease),box-shadow .3s var(--ease)}
+.fee-toggle button:hover{color:var(--plum-deep)}
+.fee-toggle button[aria-pressed="true"]{background:var(--plum);color:#fff;box-shadow:var(--shadow-soft)}
 .price .lbl{font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--forest)}
 .price .amt{display:flex;align-items:flex-start;gap:4px;font-family:var(--serif);font-weight:300;font-size:5.6rem;line-height:1;color:var(--plum-deep);margin:18px 0 4px}
 .price .amt sup{font-size:2rem;margin-top:12px}
 .price .amt small{font-family:var(--sans);font-size:.95rem;align-self:flex-end;margin:0 0 14px 10px;color:var(--muted)}
-.price .oop{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;margin:24px 0 20px;background:var(--sage-mist);border-radius:16px}
-.price .oop span{font-size:.93rem;color:var(--body)}
-.price .oop b{font-family:var(--serif);font-size:1.9rem;font-weight:400;color:var(--forest)}
-.price .fine{font-size:.9rem;color:var(--muted);margin-bottom:30px;line-height:1.65}
+/* Breakdown table — hairline rows */
+.fee-breakdown{margin:24px 0 20px}
+.fee-breakdown > div{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:12px 2px;border-top:1px solid var(--hairline-plum)}
+.fee-breakdown > div:last-child{border-bottom:1px solid var(--hairline-plum)}
+.fee-breakdown dt{font-size:.93rem;color:var(--body)}
+.fee-breakdown dd{font-variant-numeric:lining-nums;font-size:.95rem;color:var(--ink)}
+.fee-breakdown .fee-total dt,.fee-breakdown .fee-total dd{font-weight:600;color:var(--plum)}
+.price .fine{font-size:.875rem;color:var(--muted);margin-bottom:16px;line-height:1.65}
 .price .fine strong{color:var(--plum)}
+.fee-pill{display:inline-block;margin-bottom:28px;padding:7px 14px;border-radius:100px;background:var(--blush);color:var(--plum);font-size:.78rem;font-weight:600;letter-spacing:.04em}
+.fee-actions{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.fee-policy-link{font-size:.9rem}
 .steps{counter-reset:s;display:grid;gap:18px}
+/* Journey — vertical hairline + scroll-driven plum progress behind the dots */
+.journey{--dot-x:56.5px;position:relative}
+.journey > .step{position:relative;z-index:1}
+.journey-line{position:absolute;left:var(--dot-x);top:54px;bottom:60px;width:1px;background:var(--hairline-plum);z-index:0}
+.journey-fill{position:absolute;left:0;top:0;width:100%;height:100%;background:var(--plum);transform-origin:top}
+@media (prefers-reduced-motion:no-preference){
+  .journey-fill{transform:scaleY(0)}
+  @supports (animation-timeline: view()){
+    .journey-fill{animation:journey-fill linear both;animation-timeline:view();animation-range:cover 15% cover 85%}
+  }
+}
+@keyframes journey-fill{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 .step{padding:36px 38px;background:var(--cream);border:1px solid var(--line);border-radius:var(--r)}
 .step h3{font-size:1.75rem;display:flex;align-items:center;gap:16px;margin-bottom:16px}
-.step h3::before{counter-increment:s;content:counter(s);display:grid;place-items:center;flex:0 0 36px;height:36px;border-radius:50%;background:var(--sage-soft);font-family:var(--sans);font-size:.85rem;font-weight:600;color:var(--forest)}
+.step h3::before{counter-increment:s;content:counter(s);display:grid;place-items:center;flex:0 0 36px;height:36px;border-radius:50%;background:var(--sage-soft);font-family:var(--sans);font-size:.85rem;font-weight:600;color:var(--forest);transition:background .5s var(--ease),color .5s var(--ease)}
+.step.active h3::before{background:var(--plum);color:var(--cream)}
 .list{list-style:none}
 .list li{position:relative;padding:7px 0 7px 30px;color:var(--body)}
-.list li::before{content:"";position:absolute;left:2px;top:16px;width:11px;height:6px;border-left:1.5px solid var(--forest);border-bottom:1.5px solid var(--forest);transform:rotate(-45deg);opacity:.8}
+.list li::before{content:"";position:absolute;left:0;top:12px;width:16px;height:8px;border-left:1.5px solid var(--forest);border-bottom:1.5px solid var(--forest);transform:rotate(-45deg);opacity:.8}
 .tl{display:grid;grid-template-columns:repeat(4,1fr);margin:24px 0 6px;position:relative}
 .tl::before{content:"";position:absolute;left:12.5%;right:12.5%;top:24px;height:1.5px;background:linear-gradient(90deg,var(--sage),var(--rose))}
 .tl div{text-align:center;position:relative}
 .tl b{display:grid;place-items:center;width:48px;height:48px;margin:0 auto 10px;border-radius:50%;background:var(--sage-mist);border:1.5px solid var(--sage);font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--forest)}
 .tl div:last-child b{background:var(--plum);border-color:var(--plum);color:#fff}
 .tl span{font-size:.85rem;color:var(--muted)}
+/* Reminder timeline draw-in — connector draws, dots fade/scale in sequence */
+@media (prefers-reduced-motion:no-preference){
+  [data-timeline]::before{transform:scaleX(0);transform-origin:left;transition:transform 1.2s var(--ease)}
+  [data-timeline] b{opacity:0;transform:scale(.6);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+  [data-timeline] div:nth-child(1) b{transition-delay:.15s}
+  [data-timeline] div:nth-child(2) b{transition-delay:.35s}
+  [data-timeline] div:nth-child(3) b{transition-delay:.55s}
+  [data-timeline] div:nth-child(4) b{transition-delay:.75s}
+  [data-timeline].tl-in::before{transform:scaleX(1)}
+  [data-timeline].tl-in b{opacity:1;transform:none}
+}
 .aside{margin-top:16px;font-size:.95rem;color:var(--muted)}
 .flag{display:inline-block;margin-top:16px;padding:10px 16px;border-radius:12px;background:var(--blush);font-size:.9rem;color:var(--plum)}
+/* Missed-appointment notice — soft callout */
+.fee-callout{display:flex;gap:12px;margin-top:20px;padding:16px 18px;background:var(--blush);border-left:3px solid var(--plum);border-radius:12px;font-size:.875rem;color:var(--body);line-height:1.6}
+.fee-callout-ico{flex:0 0 18px;width:18px;height:18px;color:var(--plum);margin-top:2px}
+.fee-callout p{margin:0}
+.fee-callout strong{color:var(--plum)}
+.fee-callout .link{font-size:inherit;white-space:nowrap}
+/* CTA without the quote-section overlap (fees page) */
+.cta-flat{padding-top:0}
+.cta-flat .cta-box{margin-top:0}
 
 /* Cancellation */
 .cancel{background:var(--shell)}
@@ -401,6 +454,10 @@ footer a:hover{color:#fff}
 }
 @media (max-width:980px){
   .hero-grid,.intro-grid,.fees-grid,.about-grid,.meet-grid{grid-template-columns:1fr;gap:56px}
+  .glance{grid-template-columns:1fr 1fr}
+  .glance > div{padding:18px 20px}
+  .glance > div:nth-child(odd){border-left:0;padding-left:0}
+  .glance > div:nth-child(n+3){border-top:1px solid var(--hairline-plum)}
   .hero-grid > div:first-child,.figure{grid-column:auto}
   .figure{order:-1;width:min(380px,88%)}
   .gold-row{grid-template-columns:1fr;gap:16px;padding:40px 34px}
@@ -424,10 +481,23 @@ footer a:hover{color:#fff}
   .cols,.foot{grid-template-columns:1fr}
   .acc .body ul{columns:1}
   .price,.step,.avail{padding:36px 26px}
+  .journey{--dot-x:44.5px}
   .price .amt{font-size:4.6rem}
   .cta-box{padding:70px 24px;border-radius:28px}
   .faq-q{padding:22px 22px}
   .faq-item .disclose-inner > p{padding:0 22px 24px}
+}
+/* Reminder timeline goes vertical on very narrow screens */
+@media (max-width:420px){
+  .price .amt{font-size:3.4rem;flex-wrap:wrap}
+  .tl{grid-template-columns:1fr;gap:14px}
+  .tl::before{left:24px;right:auto;top:24px;bottom:24px;width:1.5px;height:auto;background:linear-gradient(180deg,var(--sage),var(--rose))}
+  .tl div{display:flex;align-items:center;gap:14px;text-align:left}
+  .tl b{margin:0;flex:0 0 48px}
+}
+@media (prefers-reduced-motion:no-preference) and (max-width:420px){
+  [data-timeline]::before{transform:scaleY(0);transform-origin:top}
+  [data-timeline].tl-in::before{transform:scaleY(1)}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,[data-reveal]{opacity:1;transform:none}.hero h1 .ln span{transform:none}.figure .seal{opacity:1}.figure .photo{transform:none!important}html{scroll-behavior:auto}
   .track{width:auto;flex-wrap:wrap;justify-content:center}
@@ -436,6 +506,9 @@ footer a:hover{color:#fff}
   .bls-dot{left:50%}
   .quote blockquote .w{opacity:1}
   .gold-stack .gold-row.rv.in.covered{transform:none;opacity:1}
+  /* Fees journey: progress line full + all dots filled when motion is reduced */
+  .journey-fill{transform:none!important}
+  .journey .step h3::before{background:var(--plum);color:var(--cream)}
 }
 
 /* ---------- booking page ---------- */
