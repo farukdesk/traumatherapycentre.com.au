@@ -8,16 +8,16 @@
       <div>
         <h5>Explore</h5>
         <ul>
-          <li><a href="#fees">Costs &amp; Appointments</a></li>
-          <li><a href="#therapies">Therapy Types</a></li>
-          <li><a href="#cancellation">Cancellation Policy</a></li>
+          <li><a href="fees.php">Costs &amp; Appointments</a></li>
+          <li><a href="therapies.php">Therapy Types</a></li>
+          <li><a href="cancellation.php">Cancellation Policy</a></li>
         </ul>
       </div>
       <div>
         <h5>About</h5>
         <ul>
-          <li><a href="#about">Qualifications</a></li>
-          <li><a href="#about">Availability</a></li>
+          <li><a href="about.php">Qualifications</a></li>
+          <li><a href="about.php">Availability</a></li>
         </ul>
       </div>
       <div>
