@@ -13,6 +13,89 @@ function booking_session_label(string $type): string
     return $type === 'telehealth' ? 'Telehealth' : 'In person';
 }
 
+/** Admin-set maximum bookings accepted per day (0 = unlimited). */
+function booking_daily_limit(): int
+{
+    return max(0, (int) setting('booking_daily_limit', '0'));
+}
+
+/**
+ * Map admin availability rows to calendar data:
+ * weekday (0=Sun..6=Sat) => hourly time slots parsed from the hours label.
+ */
+function booking_calendar_days(): array
+{
+    $dayMap = [
+        'sunday' => 0, 'monday' => 1, 'tuesday' => 2, 'wednesday' => 3,
+        'thursday' => 4, 'friday' => 5, 'saturday' => 6,
+    ];
+    $calendarDays = [];
+    foreach (get_rows('availability') as $slot) {
+        $day = strtolower(trim($slot['day_label']));
+        if (!isset($dayMap[$day])) {
+            continue;
+        }
+        $times = [];
+        if (preg_match('/(\d{1,2}):(\d{2})\s*(am|pm)?\s*[\x{2013}\x{2014}-]\s*(\d{1,2}):(\d{2})\s*(am|pm)?/iu', $slot['hours_label'], $m)) {
+            $startH = (int) $m[1];
+            if (strtolower($m[3] ?? '') === 'pm' && $startH < 12) {
+                $startH += 12;
+            }
+            $endH = (int) $m[4];
+            if (strtolower($m[6] ?? '') === 'pm' && $endH < 12) {
+                $endH += 12;
+            }
+            $start = $startH * 60 + (int) $m[2];
+            $end = $endH * 60 + (int) $m[5];
+            for ($t = $start; $t + 60 <= $end; $t += 60) {
+                $h = intdiv($t, 60);
+                $times[] = sprintf('%d:%02d %s', $h % 12 ?: 12, $t % 60, $h < 12 ? 'am' : 'pm');
+            }
+        }
+        $calendarDays[$dayMap[$day]] = $times;
+    }
+    return $calendarDays;
+}
+
+/** Upcoming dates that have reached the daily booking limit ('Y-m-d' strings). */
+function booking_full_dates(): array
+{
+    $limit = booking_daily_limit();
+    if ($limit <= 0) {
+        return [];
+    }
+    $stmt = db()->prepare(
+        "SELECT preferred_date FROM bookings
+         WHERE status <> 'cancelled' AND preferred_date >= CURDATE()
+         GROUP BY preferred_date
+         HAVING COUNT(*) >= ?"
+    );
+    $stmt->execute([$limit]);
+    return array_column($stmt->fetchAll(), 'preferred_date');
+}
+
+/**
+ * Server-side availability checks for an already-validated booking:
+ * the chosen weekday must be an available day and the date must not be full.
+ */
+function booking_validate_availability(array $data): array
+{
+    $errors = [];
+    $date = DateTime::createFromFormat('Y-m-d', $data['preferred_date']);
+    if (!$date || $date->format('Y-m-d') !== $data['preferred_date']) {
+        return $errors; // format problems are reported by booking_validate()
+    }
+    $calendarDays = booking_calendar_days();
+    $hasSlots = (bool) array_filter($calendarDays);
+    $dow = (int) $date->format('w');
+    if ($hasSlots && empty($calendarDays[$dow])) {
+        $errors['preferred_date'] = 'Bookings are not available on that day of the week — please pick an available day.';
+    } elseif (in_array($data['preferred_date'], booking_full_dates(), true)) {
+        $errors['preferred_date'] = 'That day is fully booked — please choose another date.';
+    }
+    return $errors;
+}
+
 /**
  * Validate submitted booking data.
  * Returns [data, errors]; data is normalised and safe to insert when errors is empty.
