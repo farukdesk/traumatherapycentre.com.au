@@ -12,9 +12,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = (int) ($_POST['id'] ?? 0);
 
     if (($_POST['action'] ?? '') === 'status' && isset($statuses[$_POST['status'] ?? ''])) {
-        $stmt = db()->prepare('UPDATE bookings SET status = ? WHERE id = ?');
-        $stmt->execute([$_POST['status'], $id]);
-        flash_set('success', 'Booking #' . $id . ' marked as ' . $statuses[$_POST['status']] . '.');
+        $newStatus = $_POST['status'];
+        $stmt = db()->prepare('SELECT * FROM bookings WHERE id = ?');
+        $stmt->execute([$id]);
+        $booking = $stmt->fetch();
+        if ($booking && $booking['status'] !== $newStatus) {
+            $stmt = db()->prepare('UPDATE bookings SET status = ? WHERE id = ?');
+            $stmt->execute([$newStatus, $id]);
+            $note = '';
+            if (in_array($newStatus, ['confirmed', 'completed', 'cancelled'], true)) {
+                $note = booking_notify_status($booking, $newStatus)
+                    ? ' The client has been notified by email.'
+                    : ' Could not send the notification email to the client.';
+            }
+            flash_set('success', 'Booking #' . $id . ' marked as ' . $statuses[$newStatus] . '.' . $note);
+        }
     } elseif (($_POST['action'] ?? '') === 'delete') {
         $stmt = db()->prepare('DELETE FROM bookings WHERE id = ?');
         $stmt->execute([$id]);

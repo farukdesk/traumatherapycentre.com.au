@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $submitted = isset($_GET['sent']);
-$availability = get_rows('availability');
+$availability = booking_session_times();
 $calendarDays = booking_calendar_days();
 $fullDates = booking_full_dates();
 
