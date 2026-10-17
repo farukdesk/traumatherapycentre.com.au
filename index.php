@@ -43,7 +43,7 @@ require __DIR__ . '/includes/header.php';
     <?php if ($heroStats): ?>
     <div class="hero-foot rv">
       <?php foreach ($heroStats as $stat): ?>
-      <div><b><?= e($stat['stat_value']) ?></b><span><?= e($stat['stat_label']) ?></span></div>
+      <div><b class="numeral-display"><?= e($stat['stat_value']) ?></b><span><?= e($stat['stat_label']) ?></span></div>
       <?php endforeach; ?>
     </div>
     <?php endif; ?>
@@ -81,7 +81,7 @@ require __DIR__ . '/includes/header.php';
 
     <?php foreach ($goldRows as $row): ?>
     <div class="gold-row rv">
-      <div class="num"><?= e($row['num_label']) ?></div>
+      <div class="num numeral-display"><?= e($row['num_label']) ?></div>
       <div>
         <h3><?= e($row['title']) ?></h3>
         <div class="full"><?= rich_inline($row['full_name']) ?></div>
