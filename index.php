@@ -32,10 +32,12 @@ require __DIR__ . '/includes/header.php';
         <div class="photo">
           <img src="<?= e(setting('hero_photo_url')) ?>" alt="<?= e(setting('hero_photo_alt')) ?>">
         </div>
-        <svg class="orbit" viewBox="0 0 400 400" aria-hidden="true">
-          <defs><path id="circ" d="M200,200 m-188,0 a188,188 0 1,1 376,0 a188,188 0 1,1 -376,0"/></defs>
-          <text><textPath href="#circ"><?= e(setting('hero_orbit_text')) ?></textPath></text>
-        </svg>
+        <div class="orbit-wrap" aria-hidden="true">
+          <svg class="orbit" viewBox="0 0 400 400">
+            <defs><path id="circ" d="M200,200 m-188,0 a188,188 0 1,1 376,0 a188,188 0 1,1 -376,0"/></defs>
+            <text><textPath href="#circ"><?= e(setting('hero_orbit_text')) ?></textPath></text>
+          </svg>
+        </div>
         <div class="seal"><small><?= e(setting('hero_seal_small')) ?></small><b><?= e(setting('hero_seal_bold')) ?></b></div>
       </div>
     </div>
@@ -161,8 +163,8 @@ require __DIR__ . '/includes/header.php';
   <div class="wrap meet-grid">
     <div class="meet-figure" data-reveal>
       <div class="meet-photo">
-        <!-- TODO: Replace with a dedicated candid photo of Patricia. -->
-        <img src="<?= e(setting('hero_photo_url')) ?>" alt="<?= e(setting('hero_photo_alt')) ?>">
+        <!-- TODO: Use a second photo, different from the hero — a candid shot of Patricia. -->
+        <img src="<?= e(setting('meet_photo_url') ?: setting('hero_photo_url')) ?>" alt="<?= e(setting('hero_photo_alt')) ?>">
       </div>
     </div>
     <div data-reveal data-reveal-delay="150">
@@ -170,6 +172,7 @@ require __DIR__ . '/includes/header.php';
       <!-- TODO: Confirm bio copy and credentials with the client. -->
       <h2>Care shaped by <em>experience</em></h2>
       <p class="meet-bio">Patricia is a trauma-focused psychologist dedicated to evidence-based care delivered with warmth and patience. <!-- TODO: placeholder bio --></p>
+      <p class="meet-bio">She works alongside you at a pace that feels safe, drawing on EMDR and trauma-focused CBT to help you move from surviving to living well. <!-- TODO: placeholder bio --></p>
       <ul class="meet-creds">
         <li>Accredited EMDR Therapist <!-- TODO: confirm --></li>
         <li>Registered Psychologist, AHPRA <!-- TODO: confirm --></li>
@@ -182,9 +185,14 @@ require __DIR__ . '/includes/header.php';
 
 <!-- FAQ -->
 <section class="faq">
-  <div class="wrap">
-    <div class="kicker rv"><b>v.</b> Questions</div>
-    <h2 class="rv">Frequently asked <em>questions</em></h2>
+  <div class="wrap faq-grid">
+    <div class="faq-intro rv">
+      <div class="kicker"><b>v.</b> Questions</div>
+      <h2>Frequently asked <em>questions</em></h2>
+      <!-- TODO: Confirm supporting copy with the client. -->
+      <p class="faq-sub">Short answers to the things people most often ask before their first session.</p>
+      <p class="faq-contact">Still have questions? <a class="link" href="<?= e($bookingUrl) ?>">Get in touch</a></p>
+    </div>
     <div class="faq-list">
       <?php
       // TODO: Confirm FAQ answers with the client.
