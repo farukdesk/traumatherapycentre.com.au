@@ -19,11 +19,84 @@ function booking_daily_limit(): int
     return max(0, (int) setting('booking_daily_limit', '0'));
 }
 
+/** Weekday names indexed 0 (Sunday) … 6 (Saturday). */
+function booking_weekday_names(): array
+{
+    return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+}
+
 /**
- * Map admin availability rows to calendar data:
- * weekday (0=Sun..6=Sat) => hourly time slots parsed from the hours label.
+ * The admin-managed weekly schedule, keyed by weekday (0=Sun..6=Sat).
+ * Each row: is_open, start_time, end_time, slot_minutes. Missing weekdays
+ * default to closed; an empty array means the table doesn't exist yet
+ * (run database/upgrade_booking_schedule.sql).
+ */
+function booking_schedule(): array
+{
+    static $schedule = null;
+    if ($schedule !== null) {
+        return $schedule;
+    }
+    $schedule = [];
+    try {
+        foreach (db()->query('SELECT * FROM booking_schedule ORDER BY weekday') as $row) {
+            $schedule[(int) $row['weekday']] = [
+                'is_open'      => (int) $row['is_open'] === 1,
+                'start_time'   => substr($row['start_time'], 0, 5),
+                'end_time'     => substr($row['end_time'], 0, 5),
+                'slot_minutes' => max(5, (int) $row['slot_minutes']),
+            ];
+        }
+    } catch (PDOException $e) {
+        $schedule = []; // table not created yet — fall back to legacy availability rows
+    }
+    return $schedule;
+}
+
+/** Format minutes-past-midnight as a '9:00 am' style label. */
+function booking_time_label(int $minutes): string
+{
+    $h = intdiv($minutes, 60);
+    return sprintf('%d:%02d %s', $h % 12 ?: 12, $minutes % 60, $h < 12 ? 'am' : 'pm');
+}
+
+/** Parse 'HH:MM' into minutes-past-midnight. */
+function booking_time_to_minutes(string $time): int
+{
+    $parts = explode(':', $time);
+    return ((int) ($parts[0] ?? 0)) * 60 + (int) ($parts[1] ?? 0);
+}
+
+/**
+ * Map the weekly schedule to calendar data:
+ * weekday (0=Sun..6=Sat) => time-slot labels generated from the admin
+ * schedule (start/end time + slot length). Falls back to parsing the legacy
+ * availability text rows when the booking_schedule table doesn't exist yet.
  */
 function booking_calendar_days(): array
+{
+    $schedule = booking_schedule();
+    if (!$schedule) {
+        return booking_calendar_days_legacy();
+    }
+    $calendarDays = [];
+    foreach ($schedule as $weekday => $row) {
+        $times = [];
+        if ($row['is_open']) {
+            $start = booking_time_to_minutes($row['start_time']);
+            $end = booking_time_to_minutes($row['end_time']);
+            $step = $row['slot_minutes'];
+            for ($t = $start; $t + $step <= $end; $t += $step) {
+                $times[] = booking_time_label($t);
+            }
+        }
+        $calendarDays[$weekday] = $times;
+    }
+    return $calendarDays;
+}
+
+/** Legacy fallback: parse weekday + hour-range text rows from `availability`. */
+function booking_calendar_days_legacy(): array
 {
     $dayMap = [
         'sunday' => 0, 'monday' => 1, 'tuesday' => 2, 'wednesday' => 3,
@@ -48,13 +121,40 @@ function booking_calendar_days(): array
             $start = $startH * 60 + (int) $m[2];
             $end = $endH * 60 + (int) $m[5];
             for ($t = $start; $t + 60 <= $end; $t += 60) {
-                $h = intdiv($t, 60);
-                $times[] = sprintf('%d:%02d %s', $h % 12 ?: 12, $t % 60, $h < 12 ? 'am' : 'pm');
+                $times[] = booking_time_label($t);
             }
         }
         $calendarDays[$dayMap[$day]] = $times;
     }
     return $calendarDays;
+}
+
+/**
+ * Human-readable session times for display (booking aside + homepage):
+ * list of ['day_label' => 'Tuesday', 'hours_label' => '9:00 am – 1:00 pm'].
+ */
+function booking_session_times(): array
+{
+    $schedule = booking_schedule();
+    if (!$schedule) {
+        return get_rows('availability'); // legacy fallback
+    }
+    $names = booking_weekday_names();
+    $rows = [];
+    // List Monday-first for a natural weekly reading order.
+    foreach ([1, 2, 3, 4, 5, 6, 0] as $weekday) {
+        if (empty($schedule[$weekday]['is_open'])) {
+            continue;
+        }
+        $row = $schedule[$weekday];
+        $rows[] = [
+            'day_label'   => $names[$weekday],
+            'hours_label' => booking_time_label(booking_time_to_minutes($row['start_time']))
+                           . ' – '
+                           . booking_time_label(booking_time_to_minutes($row['end_time'])),
+        ];
+    }
+    return $rows;
 }
 
 /** Upcoming dates that have reached the daily booking limit ('Y-m-d' strings). */
@@ -92,6 +192,14 @@ function booking_validate_availability(array $data): array
         $errors['preferred_date'] = 'Bookings are not available on that day of the week — please pick an available day.';
     } elseif (in_array($data['preferred_date'], booking_full_dates(), true)) {
         $errors['preferred_date'] = 'That day is fully booked — please choose another date.';
+    } elseif ($hasSlots) {
+        $normalise = static function (string $t): string {
+            return preg_replace('/\s+/', '', strtolower($t));
+        };
+        $valid = array_map($normalise, $calendarDays[$dow]);
+        if (!in_array($normalise($data['preferred_time']), $valid, true)) {
+            $errors['preferred_time'] = 'Please choose one of the available time slots for that day.';
+        }
     }
     return $errors;
 }
@@ -256,5 +364,48 @@ function booking_notify(array $data, int $bookingId): void
         $data['email'],
         'Booking request received — ' . $siteTitle,
         booking_email_wrap('Your booking request', $body)
+    );
+}
+
+/**
+ * Email the customer when their booking status changes to
+ * confirmed / completed / cancelled (best-effort — a failed email
+ * never blocks the status update). Returns true when an email was sent.
+ */
+function booking_notify_status(array $booking, string $status): bool
+{
+    $messages = [
+        'confirmed' => [
+            'subject' => 'Your appointment is confirmed',
+            'heading' => 'Appointment confirmed',
+            'intro'   => 'Good news — your appointment has been <strong>confirmed</strong>. Here are your booking details:',
+            'outro'   => 'If you need to reschedule or cancel, please reply to this email or call as early as possible.',
+        ],
+        'completed' => [
+            'subject' => 'Thank you for your session',
+            'heading' => 'Session completed',
+            'intro'   => 'Thank you for attending your session. Here is a record of your booking:',
+            'outro'   => 'You are welcome to book another appointment any time — we look forward to seeing you again.',
+        ],
+        'cancelled' => [
+            'subject' => 'Your booking has been cancelled',
+            'heading' => 'Booking cancelled',
+            'intro'   => 'Your booking below has been <strong>cancelled</strong>:',
+            'outro'   => 'If this was unexpected or you would like to rebook, please reply to this email or make a new booking on our website.',
+        ],
+    ];
+    if (!isset($messages[$status]) || !filter_var($booking['email'] ?? '', FILTER_VALIDATE_EMAIL)) {
+        return false;
+    }
+    $m = $messages[$status];
+    $siteTitle = setting('site_title', 'Trauma Therapy Centre');
+    $body = '<p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#4a4540;">Hi <strong>' . e($booking['name']) . '</strong>,</p>'
+          . '<p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#4a4540;">' . $m['intro'] . '</p>'
+          . booking_details_html($booking, (int) $booking['id'])
+          . '<p style="margin:0;font-size:13px;line-height:1.6;color:#8a8278;">' . $m['outro'] . '</p>';
+    return send_html_email(
+        $booking['email'],
+        $m['subject'] . ' — ' . $siteTitle,
+        booking_email_wrap($m['heading'], $body)
     );
 }

@@ -52,14 +52,6 @@ function admin_tables(): array
             ],
             'list' => ['category', 'item'],
         ],
-        'availability' => [
-            'label'  => 'Availability',
-            'fields' => [
-                'day_label'   => ['label' => 'Day', 'type' => 'text', 'required' => true],
-                'hours_label' => ['label' => 'Hours', 'type' => 'text', 'required' => true],
-            ],
-            'list' => ['day_label', 'hours_label'],
-        ],
         'marquee_items' => [
             'label'  => 'Marquee Items',
             'fields' => [

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/includes/booking.php';
 
 $heroStats   = get_rows('hero_stats');
 $marquee     = get_rows('marquee_items');
@@ -7,7 +8,7 @@ $goldRows    = get_rows('gold_standards');
 $therapies   = get_rows('therapies');
 $feeSteps    = get_rows('fee_steps');
 $cancelTiers = get_rows('cancellation_tiers');
-$availability = get_rows('availability');
+$availability = booking_session_times();
 $registrations = array_filter(get_rows('qualifications'), fn ($q) => $q['category'] === 'registrations');
 $training      = array_filter(get_rows('qualifications'), fn ($q) => $q['category'] === 'training');
 $bookingUrl = setting('booking_url');
