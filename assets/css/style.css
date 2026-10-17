@@ -5,6 +5,7 @@
   --lime:#c3d83a;
   --ink:#2e2a2f; --body:#4d474d; --muted:#7a737a;
   --line:rgba(46,42,47,.1); --line-light:rgba(252,249,244,.18);
+  --hairline-plum:rgba(116,48,94,.15);
   --serif:'Fraunces', Georgia, serif;
   --sans:'Figtree', system-ui, sans-serif;
   --ease:cubic-bezier(.22,1,.36,1);
@@ -85,32 +86,38 @@ header.scrolled .logo img{height:46px}
 .hero{padding:80px 0 120px;overflow:hidden;background:
   radial-gradient(700px 520px at 88% 30%,var(--sage-soft) 0%,transparent 70%),
   radial-gradient(600px 400px at 0% 100%,var(--blush) 0%,transparent 70%)}
-.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:70px;align-items:center}
+.hero-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(32px,4vw,56px);align-items:center}
+.hero-grid > div:first-child{grid-column:span 7}
 .hero h1{font-size:clamp(3.25rem,6vw,6rem);font-weight:300;margin:28px 0 30px;line-height:.98;letter-spacing:-.02em}
 .hero h1 em{color:var(--plum);font-weight:300}
 .hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
-.hero h1 .ln span{display:inline-block;transform:translateY(110%);animation:rise 1.6s var(--ease) forwards}
+.hero h1 .ln span{display:inline-block;transform:translateY(100%);animation:rise .9s ease-out forwards}
 .hero h1 .ln:nth-child(2) span{animation-delay:.12s}
 .hero h1 .ln:nth-child(3) span{animation-delay:.24s}
 @keyframes rise{to{transform:none}}
 .hero .lead{font-size:1.15rem;line-height:1.7;color:var(--body);max-width:500px;margin-bottom:42px}
 .actions{display:flex;flex-wrap:wrap;align-items:center;gap:30px}
-.figure{position:relative;justify-self:center;width:min(460px,100%);aspect-ratio:1}
-.figure .disc{position:absolute;inset:9%;border-radius:50%;background:linear-gradient(145deg,var(--sage) 0%,#c6d6c9 100%);transform:translate(6%,5%)}
-.figure .photo{position:absolute;inset:9%;border-radius:50%;overflow:hidden;background:var(--sage-soft);box-shadow:0 40px 70px -40px rgba(67,32,58,.55);border:6px solid var(--cream)}
+/* Figure — arch-masked portrait (~35% larger than the old circle) */
+.figure{position:relative;grid-column:span 5;justify-self:center;width:min(480px,100%);aspect-ratio:4/5}
+.figure .disc{position:absolute;inset:4% 2%;border-radius:999px 999px 24px 24px;background:linear-gradient(145deg,var(--sage) 0%,#c6d6c9 100%);transform:translate(5%,4%)}
+.figure .photo{position:absolute;inset:4% 2%;border-radius:999px 999px 24px 24px;overflow:hidden;background:var(--sage-soft);box-shadow:0 40px 70px -40px rgba(67,32,58,.55);border:6px solid var(--cream);will-change:transform}
 .figure .photo img{width:100%;height:100%;object-fit:cover;transition:transform 2s var(--ease)}
 .figure:hover .photo img{transform:scale(1.04)}
-.figure .orbit{position:absolute;inset:0;animation:spin 90s linear infinite}
+.figure .orbit{position:absolute;top:-8%;left:-9%;width:118%;aspect-ratio:1;animation:spin 60s linear infinite}
 .figure .orbit text{font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:3.4px;text-transform:uppercase;fill:var(--forest);opacity:.75}
-.figure .seal{position:absolute;left:0;bottom:8%;padding:16px 22px;border-radius:20px;background:var(--cream);box-shadow:var(--shadow);display:flex;flex-direction:column;text-align:left}
+.figure .seal{position:absolute;left:-6%;bottom:4%;padding:16px 22px;border-radius:16px;background:rgba(252,249,244,.7);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border:1px solid rgba(255,255,255,.6);box-shadow:var(--shadow-lift);display:flex;flex-direction:column;text-align:left;opacity:0;animation:seal-in .6s ease-out 1.3s forwards}
 .seal small{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--forest)}
 .seal b{font-family:var(--serif);font-weight:400;font-size:1.3rem;line-height:1.2;color:var(--plum-deep)}
 .seal b br{display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-.hero-foot{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:90px}
-.hero-foot div{padding:28px 30px;background:rgba(252,249,244,.7);border:1px solid var(--line);border-radius:22px}
-.hero-foot b{display:block;font-family:var(--serif);font-weight:300;font-variant-numeric:lining-nums;font-size:2.8rem;line-height:1;color:var(--plum);margin-bottom:8px}
-.hero-foot span{font-size:.93rem;color:var(--muted)}
+@keyframes seal-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* Stats strip — hairline columns, no boxed cards */
+.hero-foot{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:90px;border-block:1px solid var(--hairline-plum)}
+.hero-foot div{padding:44px 36px;border-left:1px solid var(--hairline-plum)}
+.hero-foot div:first-child{border-left:0}
+.hero-foot b{display:block;font-family:var(--serif);font-weight:300;font-variant-numeric:lining-nums;letter-spacing:-.01em;font-size:clamp(3.5rem,7vw,6rem);line-height:1;color:var(--plum);margin-bottom:14px}
+.hero-foot span{display:block;font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--forest)}
 
 /* Marquee */
 .marquee{background:var(--cream);border-block:1px solid var(--line);overflow:hidden;padding:24px 0}
@@ -292,7 +299,8 @@ footer a:hover{color:#fff}
 }
 @media (max-width:980px){
   .hero-grid,.intro-grid,.fees-grid,.about-grid{grid-template-columns:1fr;gap:56px}
-  .figure{order:-1;width:min(360px,88%)}
+  .hero-grid > div:first-child,.figure{grid-column:auto}
+  .figure{order:-1;width:min(380px,88%)}
   .gold-row{grid-template-columns:1fr;gap:16px;padding:40px 34px}
   .acc summary{grid-template-columns:44px 1fr 44px;padding:24px 24px}
   .acc .s{display:none}
@@ -306,14 +314,16 @@ footer a:hover{color:#fff}
 @media (max-width:640px){
   .topbar .wrap span:last-child{display:none}
   .nav-r .btn{display:none}
-  .hero-foot{grid-template-columns:1fr;gap:12px}
+  .hero-foot{grid-template-columns:1fr;gap:0}
+  .hero-foot div{border-left:0;border-top:1px solid var(--hairline-plum);padding:32px 4px}
+  .hero-foot div:first-child{border-top:0}
   .cols,.foot{grid-template-columns:1fr}
   .acc .body ul{columns:1}
   .price,.step,.avail{padding:36px 26px}
   .price .amt{font-size:4.6rem}
   .cta-box{padding:70px 24px;border-radius:28px}
 }
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,[data-reveal]{opacity:1;transform:none}.hero h1 .ln span{transform:none}html{scroll-behavior:auto}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv,[data-reveal]{opacity:1;transform:none}.hero h1 .ln span{transform:none}.figure .seal{opacity:1}.figure .photo{transform:none!important}html{scroll-behavior:auto}}
 
 /* ---------- booking page ---------- */
 .booking-section{padding:120px 0}
