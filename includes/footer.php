@@ -1,3 +1,7 @@
+<?php
+$footerSessionDays  = booking_open_days_label(true) ?: setting('footer_sessions_days');
+$footerSessionHours = booking_session_hours_label() ?: setting('footer_sessions_hours');
+?>
 <footer>
   <div class="wrap">
     <div class="foot">
@@ -23,8 +27,8 @@
       <div>
         <h5>Sessions</h5>
         <ul>
-          <li><?= e(setting('footer_sessions_days')) ?></li>
-          <li><?= e(setting('footer_sessions_hours')) ?></li>
+          <li><?= e($footerSessionDays) ?></li>
+          <li><?= e($footerSessionHours) ?></li>
           <li><a href="<?= e(setting('booking_url')) ?>">Book online →</a></li>
         </ul>
       </div>

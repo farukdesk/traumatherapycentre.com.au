@@ -1,7 +1,10 @@
 <?php
 require_once __DIR__ . '/functions.php';
+require_once __DIR__ . '/booking.php';
 $bookingUrl = setting('booking_url');
 $currentPage = basename($_SERVER['PHP_SELF'] ?? 'index.php');
+$topbarDays = booking_open_days_label();
+$topbarLeft = $topbarDays !== '' ? 'Sessions ' . $topbarDays : setting('topbar_left');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +23,7 @@ $currentPage = basename($_SERVER['PHP_SELF'] ?? 'index.php');
 
 <div class="topbar">
   <div class="wrap">
-    <span><i></i><?= e(setting('topbar_left')) ?></span>
+    <span><i></i><?= e($topbarLeft) ?></span>
     <span><?= e(setting('topbar_right')) ?></span>
   </div>
 </div>

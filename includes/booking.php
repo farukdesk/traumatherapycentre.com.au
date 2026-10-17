@@ -158,6 +158,56 @@ function booking_session_times(): array
     return $rows;
 }
 
+/**
+ * Open-day names from the admin schedule joined with ' · '
+ * (e.g. 'Tuesday · Thursday · Saturday', or 'Tue · Thu · Sat' when $short).
+ * Returns '' when the booking_schedule table doesn't exist yet so callers
+ * can fall back to the legacy text settings.
+ */
+function booking_open_days_label(bool $short = false): string
+{
+    $schedule = booking_schedule();
+    if (!$schedule) {
+        return '';
+    }
+    $names = booking_weekday_names();
+    $days = [];
+    // Monday-first for a natural weekly reading order.
+    foreach ([1, 2, 3, 4, 5, 6, 0] as $weekday) {
+        if (!empty($schedule[$weekday]['is_open'])) {
+            $days[] = $short ? substr($names[$weekday], 0, 3) : $names[$weekday];
+        }
+    }
+    return implode(' · ', $days);
+}
+
+/**
+ * Session hours from the admin schedule for display, e.g.
+ * '9:00 am – 1:00 pm'. Distinct ranges across open days are joined with
+ * ' · '. Returns '' when the schedule table doesn't exist yet.
+ */
+function booking_session_hours_label(): string
+{
+    $schedule = booking_schedule();
+    if (!$schedule) {
+        return '';
+    }
+    $ranges = [];
+    foreach ([1, 2, 3, 4, 5, 6, 0] as $weekday) {
+        if (empty($schedule[$weekday]['is_open'])) {
+            continue;
+        }
+        $row = $schedule[$weekday];
+        $label = booking_time_label(booking_time_to_minutes($row['start_time']))
+               . ' – '
+               . booking_time_label(booking_time_to_minutes($row['end_time']));
+        if (!in_array($label, $ranges, true)) {
+            $ranges[] = $label;
+        }
+    }
+    return implode(' · ', $ranges);
+}
+
 /** Normalise a time label for comparisons: lowercase, no whitespace ('9:00am'). */
 function booking_normalise_time(string $time): string
 {

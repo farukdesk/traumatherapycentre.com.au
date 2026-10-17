@@ -11,7 +11,7 @@ $groups = [
         'logo_url'         => ['Logo URL', 'text'],
         'favicon_url'      => ['Favicon URL', 'text'],
         'booking_url'      => ['Booking URL', 'text'],
-        'topbar_left'      => ['Top bar — left text', 'text'],
+        'topbar_left'      => ['Top bar — left text (fallback; auto-set from Availability)', 'text'],
         'topbar_right'     => ['Top bar — right text', 'text'],
     ],
     'Booking Page & Notifications' => [
@@ -78,8 +78,8 @@ $groups = [
     ],
     'Footer' => [
         'footer_about'         => ['Footer about text', 'textarea'],
-        'footer_sessions_days' => ['Session days', 'text'],
-        'footer_sessions_hours'=> ['Session hours', 'text'],
+        'footer_sessions_days' => ['Session days (fallback; auto-set from Availability)', 'text'],
+        'footer_sessions_hours'=> ['Session hours (fallback; auto-set from Availability)', 'text'],
         'crisis_line1'         => ['Crisis line 1', 'text'],
         'crisis_line2'         => ['Crisis line 2', 'text'],
         'footer_big_word'      => ['Big background word', 'text'],
