@@ -1,13 +1,14 @@
 <?php
 require_once __DIR__ . '/functions.php';
 $bookingUrl = setting('booking_url');
+$currentPage = basename($_SERVER['PHP_SELF'] ?? 'index.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?= e(setting('site_title')) ?></title>
+<title><?= e(isset($pageTitle) ? $pageTitle . ' — ' . setting('site_title') : setting('site_title')) ?></title>
 <meta name="description" content="<?= e(setting('meta_description')) ?>">
 <link rel="icon" href="<?= e(setting('favicon_url')) ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,11 +31,11 @@ $bookingUrl = setting('booking_url');
       <img src="<?= e(setting('logo_url')) ?>" alt="<?= e(setting('site_title')) ?>">
     </a>
     <ul class="menu" id="menu">
-      <li><a href="index.php" class="active">Home</a></li>
-      <li><a href="#fees">Costs &amp; Appointments</a></li>
-      <li><a href="#therapies">Therapy Types</a></li>
-      <li><a href="#cancellation">Cancellation Policy</a></li>
-      <li><a href="#about">About</a></li>
+      <li><a href="index.php"<?= $currentPage === 'index.php' ? ' class="active"' : '' ?>>Home</a></li>
+      <li><a href="fees.php"<?= $currentPage === 'fees.php' ? ' class="active"' : '' ?>>Costs &amp; Appointments</a></li>
+      <li><a href="therapies.php"<?= $currentPage === 'therapies.php' ? ' class="active"' : '' ?>>Therapy Types</a></li>
+      <li><a href="cancellation.php"<?= $currentPage === 'cancellation.php' ? ' class="active"' : '' ?>>Cancellation Policy</a></li>
+      <li><a href="about.php"<?= $currentPage === 'about.php' ? ' class="active"' : '' ?>>About</a></li>
     </ul>
     <div class="nav-r">
       <a href="<?= e($bookingUrl) ?>" class="btn btn-dark">Book <span class="arr"></span></a>

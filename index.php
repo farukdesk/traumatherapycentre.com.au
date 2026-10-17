@@ -1,16 +1,9 @@
 <?php
 require_once __DIR__ . '/includes/functions.php';
-require_once __DIR__ . '/includes/booking.php';
 
 $heroStats   = get_rows('hero_stats');
 $marquee     = get_rows('marquee_items');
 $goldRows    = get_rows('gold_standards');
-$therapies   = get_rows('therapies');
-$feeSteps    = get_rows('fee_steps');
-$cancelTiers = get_rows('cancellation_tiers');
-$availability = booking_session_times();
-$registrations = array_filter(get_rows('qualifications'), fn ($q) => $q['category'] === 'registrations');
-$training      = array_filter(get_rows('qualifications'), fn ($q) => $q['category'] === 'training');
 $bookingUrl = setting('booking_url');
 
 require __DIR__ . '/includes/header.php';
@@ -30,7 +23,7 @@ require __DIR__ . '/includes/header.php';
         <p class="lead rv"><?= e(setting('hero_lead')) ?></p>
         <div class="actions rv">
           <a href="<?= e($bookingUrl) ?>" class="btn btn-dark">Book an appointment <span class="arr"></span></a>
-          <a href="#therapies" class="link">Explore therapies</a>
+          <a href="therapies.php" class="link">Explore therapies</a>
         </div>
       </div>
 
@@ -104,145 +97,12 @@ require __DIR__ . '/includes/header.php';
   </div>
 </section>
 
-<!-- THERAPIES -->
-<section id="therapies">
-  <div class="wrap">
-    <div class="th-head">
-      <div class="rv">
-        <div class="kicker"><b>iii.</b> Therapy types</div>
-        <h2><?= rich_inline(setting('therapies_heading')) ?></h2>
-      </div>
-      <p class="rv"><?= e(setting('therapies_sub')) ?></p>
-    </div>
-
-    <div class="acc rv">
-      <?php foreach ($therapies as $i => $therapy): ?>
-      <details>
-        <summary><span class="i"><?= str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) ?></span><h3><?= e($therapy['title']) ?></h3><span class="s"><?= e($therapy['subtitle']) ?></span><span class="pm"></span></summary>
-        <div class="body"><div><?= render_body($therapy['body']) ?></div></div>
-      </details>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
-
 <!-- QUOTE -->
 <section class="quote">
   <div class="wrap rv">
     <span class="mark">&ldquo;</span>
     <blockquote><?= rich_inline(setting('quote_text')) ?></blockquote>
     <cite><?= e(setting('quote_cite')) ?></cite>
-  </div>
-</section>
-
-<!-- FEES -->
-<section id="fees">
-  <div class="wrap fees-grid">
-    <div class="fees-l rv">
-      <div class="kicker"><b>iv.</b> Costs &amp; appointments</div>
-      <h2><?= rich_inline(setting('fees_heading')) ?></h2>
-      <div class="price">
-        <div class="lbl"><?= e(setting('price_label')) ?></div>
-        <div class="amt"><sup>$</sup><?= e(setting('price_amount')) ?><small><?= e(setting('price_unit')) ?></small></div>
-        <div class="oop"><span><?= e(setting('price_oop_label')) ?></span><b><?= e(setting('price_oop_value')) ?></b></div>
-        <p class="fine"><?= rich_inline(setting('price_fine')) ?></p>
-        <a href="<?= e($bookingUrl) ?>" class="btn btn-dark">Book a session <span class="arr"></span></a>
-      </div>
-    </div>
-
-    <div class="steps rv">
-      <?php foreach ($feeSteps as $step): ?>
-      <div class="step">
-        <h3><?= e($step['title']) ?></h3>
-        <ul class="list"><?= render_list_items($step['items']) ?></ul>
-        <?php if ($step['show_timeline']): ?>
-        <div class="tl">
-          <?php foreach (explode('|', setting('reminder_timeline')) as $slot):
-              [$when, $how] = array_pad(explode(':', $slot, 2), 2, ''); ?>
-          <div><b><?= e($when) ?></b><span><?= e($how) ?></span></div>
-          <?php endforeach; ?>
-        </div>
-        <p class="aside"><?= e(setting('reminder_note')) ?></p>
-        <?php endif; ?>
-        <?php if ($step['flag'] !== ''): ?>
-        <span class="flag"><?= e($step['flag']) ?></span>
-        <?php endif; ?>
-      </div>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
-
-<!-- CANCELLATION -->
-<section class="cancel" id="cancellation">
-  <div class="wrap">
-    <div class="kicker rv"><b>v.</b> Cancellation policy</div>
-    <h2 class="rv"><?= rich_inline(setting('cancel_heading')) ?></h2>
-    <p class="sub rv"><?= e(setting('cancel_sub')) ?></p>
-
-    <div class="scale rv">
-      <?php foreach ($cancelTiers as $tier): ?>
-      <div><small>Notice given</small><h3><?= e($tier['notice_label']) ?></h3><div class="fee"><?= e($tier['fee_label']) ?><span><?= e($tier['fee_note']) ?></span></div></div>
-      <?php endforeach; ?>
-    </div>
-
-    <div class="c-grid">
-      <div class="rv">
-        <h4>Why it matters</h4>
-        <p style="color:var(--muted);margin-bottom:10px"><?= e(setting('cancel_why_intro')) ?></p>
-        <ul class="three">
-          <?php $romans = ['i.', 'ii.', 'iii.', 'iv.', 'v.'];
-          foreach (preg_split('/\R/', trim(setting('cancel_why_items'))) as $i => $item): if (trim($item) === '') continue; ?>
-          <li><b><?= e($romans[$i] ?? ($i + 1) . '.') ?></b><?= rich_inline(trim($item)) ?></li>
-          <?php endforeach; ?>
-        </ul>
-      </div>
-      <div class="rv">
-        <h4>Settling fees</h4>
-        <ul class="list"><?= render_list_items(setting('cancel_settle_items')) ?></ul>
-      </div>
-      <div class="rv">
-        <h4>When fees are waived</h4>
-        <ul class="list"><?= render_list_items(setting('cancel_waived_items')) ?></ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-  <div class="wrap about-grid">
-    <aside class="avail rv">
-      <div class="kicker"><b>vi.</b> Sessions</div>
-      <h3>My <em>availability</em></h3>
-      <?php foreach ($availability as $slot): ?>
-      <div class="slot"><span><?= e($slot['day_label']) ?></span><span><?= e($slot['hours_label']) ?></span></div>
-      <?php endforeach; ?>
-      <p class="age"><?= e(setting('availability_note')) ?></p>
-      <a href="<?= e($bookingUrl) ?>" class="btn btn-ivory">Book appointment <span class="arr"></span></a>
-    </aside>
-    <div class="creds rv">
-      <div class="kicker"><b>vii.</b> Qualifications</div>
-      <h2><?= rich_inline(setting('about_heading')) ?></h2>
-      <div class="cols">
-        <div>
-          <h4>Registrations</h4>
-          <ul>
-            <?php foreach ($registrations as $q): ?>
-            <li><?= e($q['item']) ?></li>
-            <?php endforeach; ?>
-          </ul>
-        </div>
-        <div>
-          <h4>Training &amp; memberships</h4>
-          <ul>
-            <?php foreach ($training as $q): ?>
-            <li><?= e($q['item']) ?></li>
-            <?php endforeach; ?>
-          </ul>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
