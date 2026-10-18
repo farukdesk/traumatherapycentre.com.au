@@ -108,6 +108,12 @@
     })
   );
 
+  // Deep links from the About page: open the matching therapy accordion
+  if (location.hash) {
+    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (target && target.tagName === 'DETAILS' && target.closest('.acc')) target.open = true;
+  }
+
   // Accessible disclosures (therapy card "Read more" + FAQ accordion)
   document.querySelectorAll('button[aria-controls]').forEach((btn) => {
     const panel = document.getElementById(btn.getAttribute('aria-controls'));

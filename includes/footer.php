@@ -30,8 +30,8 @@ if (!function_exists('crisis_tel_links')) {
       <div>
         <h5>About</h5>
         <ul>
-          <li><a href="about.php">Qualifications</a></li>
-          <li><a href="about.php">Availability</a></li>
+          <li><a href="about.php#qualifications">Qualifications</a></li>
+          <li><a href="about.php#availability">Availability</a></li>
         </ul>
       </div>
       <div>
