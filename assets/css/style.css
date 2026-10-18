@@ -470,25 +470,71 @@ sup.reg{font-size:.45em;margin-left:.1em;line-height:0}
 
 /* About */
 .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:80px;align-items:start}
-.avail{background:linear-gradient(160deg,#5a2a4d 0%,var(--plum-deep) 100%);color:var(--cream);padding:52px 46px;border-radius:var(--r);position:sticky;top:120px;overflow:hidden;box-shadow:0 40px 70px -40px rgba(67,32,58,.7)}
+.avail{position:relative;background:linear-gradient(160deg,#5a2a4d 0%,var(--plum-deep) 100%);color:var(--cream);padding:52px 46px;border-radius:var(--r);overflow:hidden;box-shadow:0 40px 70px -40px rgba(67,32,58,.7)}
+/* Sticky only on desktop; the grid cell keeps it inside its own section */
+@media (min-width:1024px){.avail{position:sticky;top:120px}}
 .avail::after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(163,186,169,.12);right:-120px;bottom:-120px}
 .avail .kicker{color:var(--sage)}
 .avail .kicker b{color:var(--rose)}
 .avail h3{color:var(--cream);font-size:2.6rem;font-weight:300;margin:20px 0 26px}
 .avail h3 em{color:var(--rose)}
-.slot{display:flex;justify-content:space-between;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--line-light)}
+.slot{display:flex;justify-content:space-between;align-items:baseline;padding:18px 12px;margin-inline:-12px;border-radius:12px;border-bottom:1px solid var(--line-light);transition:background .3s var(--ease)}
+.slot:hover{background:rgba(252,249,244,.06)} /* existing cream hue, opacity only */
 .slot span:first-child{font-family:var(--serif);font-size:1.4rem;font-weight:300}
 .slot span:last-child{font-size:.95rem;color:rgba(252,249,244,.75)}
-.age{margin:28px 0 32px;font-family:var(--serif);font-style:italic;font-weight:300;font-size:1.15rem;line-height:1.5;color:var(--rose)}
+/* Pill tags — cream text, cream hairline border (existing hue, opacity only) */
+.avail-tags{display:flex;flex-wrap:wrap;gap:10px;margin:28px 0 32px}
+.avail-tag{display:inline-block;padding:7px 15px;border:1px solid rgba(252,249,244,.3);border-radius:999px;color:var(--cream);font-size:.82rem;font-weight:500;letter-spacing:.03em}
 .avail .btn{position:relative;z-index:1}
 .creds h2{margin:26px 0 50px}
 .creds h2 em{color:var(--plum)}
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:50px}
-.cols h4{font-family:var(--sans);font-weight:600;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);margin-bottom:8px}
-.cols ul{list-style:none}
-.cols li{padding:14px 0 14px 22px;border-bottom:1px solid var(--line);font-size:1rem;color:var(--ink);position:relative;transition:color .4s}
-.cols li::before{content:"";position:absolute;left:0;top:24px;width:7px;height:7px;border-radius:50%;background:var(--sage)}
-.cols li:hover{color:var(--plum)}
+/* Anchor targets land 120px below the sticky header */
+#availability,#qualifications{scroll-margin-top:120px}
+
+/* About hero — Meet Patricia */
+.about-hero-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(40px,5vw,80px);align-items:center}
+.about-hero .figure{grid-column:auto;width:min(440px,100%)}
+/* Soft mint offset arch behind the candid photo */
+.about-hero .disc{background:var(--sage-soft)}
+.about-hero h1{font-size:clamp(2.75rem,5vw,4.25rem);font-weight:300;margin:26px 0 26px;line-height:1.02;letter-spacing:-.02em}
+.about-hero h1 em{color:var(--plum);font-weight:300}
+.about-bio{color:var(--body);max-width:560px}
+.about-bio+.about-bio{margin-top:16px}
+/* Facts — small hairline strip, same language as the homepage stats */
+.about-facts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:36px;border-block:1px solid var(--hairline-plum)}
+.about-facts > div{padding:18px 20px;border-left:1px solid var(--hairline-plum)}
+.about-facts > div:first-child{border-left:0;padding-left:0}
+.about-facts b{display:block;font-size:1.9rem;line-height:1.15;color:var(--plum)}
+.about-facts span{display:block;font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);margin-top:5px}
+.signature{font-family:var(--serif);font-style:italic;font-weight:300;font-size:1.9rem;color:var(--plum-deep);margin-top:30px}
+
+/* Qualifications — regrouped right column */
+.qual-eyebrow,.qual-group h4{font-family:var(--sans);font-weight:600;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);margin-bottom:10px}
+.qual-lead{padding-bottom:28px;border-bottom:1px solid var(--hairline-plum)}
+.qual-cred{font-family:var(--serif);font-weight:350;font-size:1.5rem;line-height:1.3;color:var(--plum-deep)}
+.qual-group{margin-top:36px}
+.qual-list{list-style:none}
+.qual-list li{padding:12px 0;border-bottom:1px solid var(--hairline-plum);font-size:.95rem;color:var(--ink)}
+/* Funding & referral pathways — wrap-flowing pill badges */
+.badge-list{list-style:none;display:flex;flex-wrap:wrap;gap:10px}
+.badge{display:inline-block;padding:8px 16px;background:var(--cream);border:1px solid rgba(116,48,94,.12);border-radius:999px;font-size:.875rem;color:var(--ink)} /* existing plum hue, opacity only */
+.qual-training > div{display:grid;grid-template-columns:160px 1fr;gap:6px 24px;padding:12px 0;border-bottom:1px solid var(--hairline-plum)}
+.qual-training dt{font-family:var(--serif);font-style:italic;font-weight:300;font-size:1.05rem;color:var(--plum)}
+.qual-training dd{font-size:.95rem;color:var(--body);line-height:1.8}
+
+/* Where we meet */
+.where{background:var(--shell)}
+.where h2{margin:26px 0 0;max-width:720px}
+.where h2 em{color:var(--plum)}
+.wm-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:56px}
+.wm-card{background:var(--cream);border:1px solid var(--hairline-plum-8);border-radius:24px;padding:44px 40px;box-shadow:var(--shadow-soft)}
+/* Hairline line-icons in the sage token */
+.wm-ico{display:inline-flex;width:44px;height:44px;color:var(--sage);margin-bottom:18px}
+.wm-ico svg{width:100%;height:100%}
+.wm-card h3{font-size:1.65rem;margin-bottom:12px}
+.wm-card p{color:var(--body)}
+.wm-list{list-style:none;margin-top:18px}
+.wm-list li{padding:11px 0;border-top:1px solid var(--hairline-plum);font-size:.95rem;color:var(--body)}
 
 /* CTA — card overlaps the quote/footer boundary by exactly var(--cta-overlap) */
 .cta{padding:0 0 calc(var(--section-pad) / 2)}
@@ -533,6 +579,7 @@ footer a:hover{color:#fff}
 @media (max-width:767.98px){
   /* Keep only the arch + badge on mobile */
   .figure .orbit-wrap{display:none}
+  .wm-grid{grid-template-columns:1fr}
 }
 @media (max-width:1120px){
   .menu{display:none}
@@ -541,7 +588,8 @@ footer a:hover{color:#fff}
   .menu.open a::after{display:none}
 }
 @media (max-width:980px){
-  .hero-grid,.intro-grid,.fees-grid,.about-grid,.meet-grid{grid-template-columns:1fr;gap:56px}
+  .hero-grid,.intro-grid,.fees-grid,.about-grid,.meet-grid,.about-hero-grid{grid-template-columns:1fr;gap:56px}
+  .about-hero .figure{width:min(340px,88%)}
   .glance{grid-template-columns:1fr 1fr}
   .glance > div{padding:18px 20px}
   .glance > div:nth-child(odd){border-left:0;padding-left:0}
@@ -586,6 +634,12 @@ footer a:hover{color:#fff}
   .tacc-grid{padding:0 18px 28px}
   .tacc-text ul{columns:1}
   .price,.step,.avail{padding:36px 26px}
+  .about-facts{grid-template-columns:1fr}
+  .about-facts > div{display:flex;align-items:baseline;gap:14px;border-left:0;border-top:1px solid var(--hairline-plum);padding:14px 4px}
+  .about-facts > div:first-child{border-top:0}
+  .about-facts span{margin-top:0}
+  .qual-training > div{grid-template-columns:1fr}
+  .wm-card{padding:34px 26px}
   .journey{--dot-x:44.5px}
   .price .amt{font-size:4.6rem}
   .cta-box{padding:70px 24px;border-radius:28px}
