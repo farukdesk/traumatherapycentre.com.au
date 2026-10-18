@@ -13,6 +13,18 @@ function booking_session_label(string $type): string
     return $type === 'telehealth' ? 'Telehealth' : 'In person';
 }
 
+/** Mental Health Treatment Plan options: value => label. */
+function booking_mhtp_options(): array
+{
+    return ['yes' => 'Yes', 'not_yet' => 'Not yet', 'not_needed' => 'Not needed'];
+}
+
+/** "Referred through" options (optional field). */
+function booking_referral_options(): array
+{
+    return ['Self', 'GP', 'DVA', 'ADF', 'WorkCover QLD', 'NDIS', 'Victim Support ACT', 'Other'];
+}
+
 /** Admin-set maximum bookings accepted per day (0 = unlimited). */
 function booking_daily_limit(): int
 {
@@ -320,6 +332,8 @@ function booking_validate(array $input): array
         'preferred_date' => trim((string) ($input['preferred_date'] ?? '')),
         'preferred_time' => trim((string) ($input['preferred_time'] ?? '')),
         'message'        => trim((string) ($input['message'] ?? '')),
+        'mhtp'           => isset(booking_mhtp_options()[$input['mhtp'] ?? '']) ? $input['mhtp'] : '',
+        'referral'       => in_array($input['referral'] ?? '', booking_referral_options(), true) ? $input['referral'] : '',
         'age_confirm'    => !empty($input['age_confirm']),
     ];
 
@@ -356,13 +370,26 @@ function booking_validate(array $input): array
 /** Insert a booking and return its id. */
 function booking_create(array $data): int
 {
+    // Optional intake details ride along in the message so the existing
+    // bookings schema, admin screens and emails all show them untouched.
+    $details = [];
+    if ($data['mhtp'] !== '') {
+        $details[] = 'Mental Health Treatment Plan: ' . booking_mhtp_options()[$data['mhtp']];
+    }
+    if ($data['referral'] !== '') {
+        $details[] = 'Referred through: ' . $data['referral'];
+    }
+    $message = $data['message'];
+    if ($details) {
+        $message = implode("\n", $details) . ($message !== '' ? "\n\n" . $message : '');
+    }
     $stmt = db()->prepare(
         'INSERT INTO bookings (name, email, phone, session_type, preferred_date, preferred_time, message)
          VALUES (?, ?, ?, ?, ?, ?, ?)'
     );
     $stmt->execute([
         $data['name'], $data['email'], $data['phone'], $data['session_type'],
-        $data['preferred_date'], $data['preferred_time'], $data['message'],
+        $data['preferred_date'], $data['preferred_time'], $message,
     ]);
     return (int) db()->lastInsertId();
 }
