@@ -49,6 +49,27 @@
     });
   }
 
+  // Cancellation fee scale — track draws, then dots appear in sequence.
+  // Static (full track, dots visible) under reduced motion via CSS.
+  const feeScale = document.querySelector('[data-fee-scale]');
+  if (feeScale) {
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      feeScale.classList.add('fs-in');
+    } else {
+      const fsIo = new IntersectionObserver(
+        (es, obs) =>
+          es.forEach((e) => {
+            if (e.isIntersecting) {
+              feeScale.classList.add('fs-in');
+              obs.disconnect();
+            }
+          }),
+        { threshold: 0.3 }
+      );
+      fsIo.observe(feeScale);
+    }
+  }
+
   // Stats count-up — real final values stay in the DOM for screen readers
   const statsStrip = document.querySelector('[data-stats]');
   if (statsStrip && !reduceMotion && 'IntersectionObserver' in window) {

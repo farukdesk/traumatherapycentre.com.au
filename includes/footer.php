@@ -1,6 +1,7 @@
 <?php
-$footerSessionDays  = booking_open_days_label(true) ?: setting('footer_sessions_days');
-$footerSessionHours = booking_session_hours_label() ?: setting('footer_sessions_hours');
+require_once __DIR__ . '/site.php';
+$footerSessionDays  = site_session_days(true);
+$footerSessionHours = site_session_hours();
 
 /** Wrap crisis phone numbers (000, Lifeline 13 11 14) in tel: links. */
 if (!function_exists('crisis_tel_links')) {
