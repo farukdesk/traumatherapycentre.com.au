@@ -32,10 +32,26 @@ require __DIR__ . '/includes/header.php';
         <div class="photo">
           <img src="<?= e(setting('hero_photo_url')) ?>" alt="<?= e(setting('hero_photo_alt')) ?>">
         </div>
-        <div class="orbit-wrap" aria-hidden="true">
+        <?php
+        // Each word in the rotating ring links to its therapy anchor.
+        $orbitSlugs = [
+            'emdr' => 'emdr', 'internal family systems' => 'ifs', 'brainspotting' => 'brainspotting',
+            'irest' => 'irest', 'expressive arts' => 'expressive-arts', 'schema' => 'schema',
+            'hrv' => 'hrv', 'personal growth' => 'personal-growth', 'tf-cbt' => 'tf-cbt',
+        ];
+        $orbitLabels = array_values(array_filter(array_map('trim', explode('·', setting('hero_orbit_text')))));
+        $orbitHtml = '';
+        foreach ($orbitLabels as $label) {
+            $key = strtolower(str_replace('®', '', $label));
+            $orbitHtml .= isset($orbitSlugs[$key])
+                ? '<a href="therapies.php#' . e($orbitSlugs[$key]) . '">' . e($label) . '</a> · '
+                : e($label) . ' · ';
+        }
+        ?>
+        <div class="orbit-wrap" role="navigation" aria-label="Therapies: <?= e(implode(', ', $orbitLabels)) ?>">
           <svg class="orbit" viewBox="0 0 400 400">
             <defs><path id="circ" d="M200,200 m-188,0 a188,188 0 1,1 376,0 a188,188 0 1,1 -376,0"/></defs>
-            <text><textPath href="#circ"><?= e(setting('hero_orbit_text')) ?></textPath></text>
+            <text><textPath href="#circ"><?= $orbitHtml ?></textPath></text>
           </svg>
         </div>
         <div class="seal"><small><?= e(setting('hero_seal_small')) ?></small><b><?= e(setting('hero_seal_bold')) ?></b></div>

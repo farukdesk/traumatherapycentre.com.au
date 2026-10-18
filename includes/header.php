@@ -1,9 +1,10 @@
 <?php
 require_once __DIR__ . '/functions.php';
 require_once __DIR__ . '/booking.php';
+require_once __DIR__ . '/site.php';
 $bookingUrl = setting('booking_url');
 $currentPage = basename($_SERVER['PHP_SELF'] ?? 'index.php');
-$topbarDays = booking_open_days_label();
+$topbarDays = site_session_days();
 $topbarLeft = $topbarDays !== '' ? 'Sessions ' . $topbarDays : setting('topbar_left');
 ?>
 <!DOCTYPE html>
@@ -19,7 +20,7 @@ $topbarLeft = $topbarDays !== '' ? 'Sessions ' . $topbarDays : setting('topbar_l
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css?v=<?= filemtime(__DIR__ . '/../assets/css/style.css') ?>">
 </head>
-<body>
+<body<?= isset($bodyClass) && $bodyClass !== '' ? ' class="' . e($bodyClass) . '"' : '' ?>>
 
 <div class="topbar">
   <div class="wrap">

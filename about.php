@@ -104,7 +104,7 @@ require __DIR__ . '/includes/header.php';
           </div>
           <div>
             <dt>Growth</dt>
-            <dd><a class="link" href="therapies.php#enneagram">Enneagram Teacher</a></dd>
+            <dd><a class="link" href="therapies.php#personal-growth">Enneagram Teacher</a></dd>
           </div>
         </dl>
       </div>

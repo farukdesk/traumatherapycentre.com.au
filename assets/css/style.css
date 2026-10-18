@@ -58,6 +58,9 @@ section{padding:var(--section-pad) 0;position:relative}
 .btn-dark:hover,.btn-dark:focus-visible{background:var(--plum-deep)}
 .btn-ivory{background:var(--cream);color:var(--plum-deep)}
 .btn-ivory:hover,.btn-ivory:focus-visible{background:#fff}
+/* Secondary outline button — hairline plum outline on a transparent ground */
+.btn-outline{background:transparent;border:1px solid var(--plum);color:var(--plum)}
+.btn-outline:hover,.btn-outline:focus-visible{background:var(--cream)}
 /* Text links — underline draws left to right */
 .link{font-weight:500;color:var(--plum);padding-bottom:3px;background-image:linear-gradient(var(--rose),var(--rose)),linear-gradient(var(--plum),var(--plum));background-repeat:no-repeat;background-position:0 100%,0 100%;background-size:100% 1.5px,0 1.5px;transition:background-size .5s var(--ease)}
 .link:hover,.link:focus-visible{background-size:100% 1.5px,100% 1.5px}
@@ -93,7 +96,8 @@ header.scrolled .logo img{height:46px}
 .hero-grid > div:first-child{grid-column:span 7}
 .hero h1{font-size:clamp(3.25rem,6vw,6rem);font-weight:300;margin:28px 0 30px;line-height:.98;letter-spacing:-.02em}
 .hero h1 em{color:var(--plum);font-weight:300}
-.hero h1 .ln{display:block;overflow:hidden;padding-bottom:.06em}
+/* Padded clip box so ascenders/descenders are never cut while the lines rise in */
+.hero h1 .ln{display:block;overflow:hidden;padding:.12em 0 .06em;margin-top:-.12em}
 .hero h1 .ln span{display:inline-block;transform:translateY(100%);animation:rise .9s ease-out forwards}
 .hero h1 .ln:nth-child(2) span{animation-delay:.12s}
 .hero h1 .ln:nth-child(3) span{animation-delay:.24s}
@@ -116,6 +120,10 @@ header.scrolled .logo img{height:46px}
   mask-image:conic-gradient(from 110deg,transparent 0deg 140deg,#000 140deg 360deg)}
 .figure .orbit{display:block;width:100%;height:100%;animation:spin 60s linear infinite}
 .figure .orbit text{font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:3.4px;text-transform:uppercase;fill:var(--forest);opacity:.75}
+/* Ring words link to therapy anchors — keep them clickable and give focus a visible state */
+.figure .orbit a{pointer-events:auto}
+.figure .orbit a:hover,.figure .orbit a:focus-visible{fill:var(--plum);text-decoration:underline}
+.figure .orbit a:focus-visible{outline:2px solid var(--plum);outline-offset:3px}
 .figure .seal{position:absolute;left:-6%;bottom:4%;padding:16px 22px;border-radius:16px;background:rgba(252,249,244,.7);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border:1px solid rgba(255,255,255,.6);box-shadow:var(--shadow-lift);display:flex;flex-direction:column;text-align:left;opacity:0;animation:seal-in .6s ease-out 1.3s forwards}
 .seal small{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--forest)}
 .seal b{font-family:var(--serif);font-weight:400;font-size:1.3rem;line-height:1.2;color:var(--plum-deep)}
@@ -236,32 +244,85 @@ header.scrolled .logo img{height:46px}
 .faq-q[aria-expanded="true"] .faq-pm::after{transform:translate(-50%,-50%) rotate(0)}
 .faq-item .disclose-inner > p{padding:0 30px 28px;color:var(--body);max-width:640px}
 
-/* Therapies */
-.th-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap;margin-bottom:56px}
+/* Therapies page — hero: intro paragraph baseline-aligned to the heading */
+.th-hero{padding-bottom:calc(var(--section-pad) / 2)}
+.th-head{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:40px;align-items:end;margin-bottom:56px}
+.th-hero .th-head{margin-bottom:0}
 .th-head h2{margin-top:26px}
 .th-head h2 em{color:var(--plum)}
-.th-head p{max-width:380px;color:var(--body)}
-.acc{display:grid;gap:14px}
-.acc details{background:var(--cream);border:1px solid var(--line);border-radius:22px;transition:background .5s,box-shadow .5s,border-color .5s}
-.acc details:hover{border-color:rgba(116,48,94,.2)}
-.acc details[open]{background:#fff;box-shadow:var(--shadow);border-color:transparent}
-.acc summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:70px 1fr 1fr 48px;gap:24px;align-items:center;padding:30px 34px}
-.acc summary::-webkit-details-marker{display:none}
-.acc .i{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--sage)}
-.acc h3{font-size:clamp(1.6rem,2.4vw,2.1rem);transition:color .4s}
-.acc summary:hover h3{color:var(--plum)}
-.acc .s{color:var(--muted);font-size:.98rem}
-.acc .pm{justify-self:end;width:44px;height:44px;border-radius:50%;background:var(--sage-soft);position:relative;transition:all .5s var(--ease)}
-.acc .pm::before,.acc .pm::after{content:"";position:absolute;left:50%;top:50%;width:13px;height:1.5px;border-radius:2px;background:var(--forest);transform:translate(-50%,-50%);transition:transform .5s var(--ease)}
-.acc .pm::after{transform:translate(-50%,-50%) rotate(90deg)}
-.acc details[open] .pm{background:var(--plum)}
-.acc details[open] .pm::before,.acc details[open] .pm::after{background:#fff}
-.acc details[open] .pm::after{transform:translate(-50%,-50%) rotate(0)}
-.acc .body{display:grid;grid-template-columns:70px 1fr 1fr 48px;gap:24px;padding:0 34px 36px}
-.acc .body > div{grid-column:2/4;max-width:720px;color:var(--body);padding-top:22px;border-top:1px solid var(--line)}
-.acc .body ul{list-style:none;margin-top:14px;columns:2;column-gap:24px}
-.acc .body li{font-size:.95rem;color:var(--body);padding:5px 0 5px 20px;position:relative;break-inside:avoid}
-.acc .body li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--sage-soft);border:1.5px solid var(--sage)}
+.th-head p{max-width:36ch;color:var(--body);justify-self:end}
+/* iRest® — registered mark as a small superscript */
+sup.reg{font-size:.45em;margin-left:.1em;line-height:0}
+
+/* Gold standards pair — homepage therapy-card design, side by side */
+.th-gold .gold-pair{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.gold-row.gold-card{grid-template-columns:1fr;gap:0;align-content:start}
+@media (min-width:1024px){.gold-row.gold-card{position:static}}
+.gold-card .num{margin-bottom:18px}
+.gold-card h3{font-size:clamp(2rem,3vw,2.6rem)}
+.gold-card .gold-body{margin-top:24px}
+.gold-pair .gold-card:hover{box-shadow:var(--shadow-lift)}
+.gold-standards-note{margin-top:36px}
+.gold-standards-note em{font-family:var(--serif);font-size:1.2rem;color:var(--forest)}
+
+/* Supporting therapies accordion */
+.tacc{display:grid;gap:14px}
+.tacc-item{background:var(--cream);border:1px solid var(--hairline-plum-8);border-radius:22px;box-shadow:var(--shadow-soft);transition:box-shadow .5s var(--ease);scroll-margin-top:120px}
+.tacc-item.open{box-shadow:var(--shadow-lift)}
+.tacc-h{font-size:inherit;line-height:inherit;letter-spacing:0}
+.tacc-btn{width:100%;display:grid;grid-template-columns:70px 1fr 1fr 48px;gap:24px;align-items:center;padding:30px 34px;border:0;background:none;cursor:pointer;text-align:left;font:inherit;border-radius:inherit}
+.tacc-num{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.tacc-num .i{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--sage)}
+.t-ico{display:block;color:var(--sage);transition:color .3s var(--ease)}
+.tacc-title{display:block;font-family:var(--serif);font-weight:350;font-size:clamp(1.6rem,2.4vw,2.1rem);line-height:1.1;letter-spacing:-.02em;color:var(--plum-deep);transition:color .3s var(--ease),transform .3s var(--ease)}
+.tacc-sub-m{display:none;color:var(--muted);font-size:.9rem;margin-top:6px}
+.tacc-s{color:var(--muted);font-size:.98rem}
+/* Row hover (closed): title shifts 4px right, icon tints to plum */
+.tacc-item:not(.open) .tacc-btn:hover .tacc-title,
+.tacc-item:not(.open) .tacc-btn:focus-visible .tacc-title{transform:translateX(4px);color:var(--plum)}
+.tacc-item:not(.open) .tacc-btn:hover .t-ico,
+.tacc-item:not(.open) .tacc-btn:focus-visible .t-ico{color:var(--plum)}
+.tacc-pm{justify-self:end;width:44px;height:44px;border-radius:50%;background:var(--sage-soft);position:relative;transition:background .5s var(--ease)}
+.tacc-pm::before,.tacc-pm::after{content:"";position:absolute;left:50%;top:50%;width:13px;height:1.5px;border-radius:2px;background:var(--forest);transform:translate(-50%,-50%);transition:transform .5s var(--ease)}
+.tacc-pm::after{transform:translate(-50%,-50%) rotate(90deg)}
+.tacc-btn[aria-expanded="true"] .tacc-pm{background:var(--plum)}
+.tacc-btn[aria-expanded="true"] .tacc-pm::before,.tacc-btn[aria-expanded="true"] .tacc-pm::after{background:var(--cream)}
+.tacc-btn[aria-expanded="true"] .tacc-pm::after{transform:translate(-50%,-50%) rotate(0)}
+/* Smooth height: grid-template-rows 0fr → 1fr */
+.tacc-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s ease-out}
+.tacc-panel-inner{overflow:hidden;visibility:hidden;transition:visibility 0s .5s}
+.tacc-item.open .tacc-panel{grid-template-rows:1fr}
+.tacc-item.open .tacc-panel-inner{visibility:visible;transition:visibility 0s}
+.tacc-grid{padding:0 34px 40px}
+.tacc-text{color:var(--body);max-width:720px;padding-top:22px;border-top:1px solid var(--line)}
+.tacc-text p+p{margin-top:14px}
+.tacc-text ul{list-style:none;margin-top:14px;columns:2;column-gap:24px}
+.tacc-text li{font-size:.95rem;color:var(--body);padding:5px 0 5px 20px;position:relative;break-inside:avoid}
+.tacc-text li::before{content:"";position:absolute;left:0;top:15px;width:7px;height:7px;border-radius:50%;background:var(--sage-soft);border:1.5px solid var(--sage)}
+/* Side panel — hairline-separated rows */
+.tacc-side{margin-top:32px}
+.tacc-side-row{padding:18px 0;border-top:1px solid var(--hairline-plum)}
+.tacc-side-row:last-child{border-bottom:1px solid var(--hairline-plum)}
+.tacc-side h4{font-family:var(--sans);font-weight:600;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);margin-bottom:10px}
+.tacc-side p{font-size:.95rem;color:var(--body)}
+.tacc-pills{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.tacc-pills li{padding:5px 13px;border-radius:100px;background:var(--sage-mist);border:1px solid var(--hairline-plum-8);font-size:.8rem;font-weight:500;color:var(--forest)}
+.tacc-links{list-style:none;display:flex;flex-wrap:wrap;gap:8px 20px}
+.tacc-links .link{font-size:.92rem}
+/* Open panel: two columns on desktop — text span 7, side panel span 4 offset 1 */
+@media (min-width:1024px){
+  .tacc-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+  .tacc-text{grid-column:1/8}
+  .tacc-side{grid-column:9/13;margin-top:0;padding-top:22px}
+}
+/* Signature icon motion — static under reduced motion */
+@media (prefers-reduced-motion:no-preference){
+  .tacc-item.open .t-ico-hrv path{stroke-dasharray:1;stroke-dashoffset:1;animation:hrv-draw 2.5s ease-out forwards,hrv-flow 6s ease-in-out 2.5s infinite}
+  .tacc-item.open .t-ico-irest{animation:moon-fade 1.5s ease-out both}
+}
+@keyframes hrv-draw{to{stroke-dashoffset:0}}
+@keyframes hrv-flow{0%,100%{stroke-dashoffset:0}50%{stroke-dashoffset:.14}}
+@keyframes moon-fade{from{opacity:.4}to{opacity:1}}
 
 /* Quote — word-by-word reveal, portrait attribution.
    Bottom padding reserves room for the overlapping CTA card plus ≥48px of clear
@@ -362,24 +423,50 @@ header.scrolled .logo img{height:46px}
 .cta-flat .cta-box{margin-top:0}
 
 /* Cancellation */
+/* Shell page background — the header band matches the page, so no seam under the nav */
+.page-shell{background:var(--shell)}
+.page-shell header{background:transparent}
+.page-shell header.scrolled{background:rgba(244,236,226,.72)} /* --shell, opacity only */
 .cancel{background:var(--shell)}
 .cancel h2{margin:26px 0 18px;max-width:760px}
 .cancel h2 em{color:var(--plum)}
 .cancel .sub{color:var(--body);max-width:560px;margin-bottom:56px}
-.scale{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.scale > div{padding:40px 38px;background:var(--cream);border-radius:var(--r);border:1px solid var(--line);position:relative;overflow:hidden}
-.scale > div::before{content:"";position:absolute;left:38px;top:0;width:48px;height:4px;border-radius:0 0 4px 4px}
-.scale > div:nth-child(1)::before{background:var(--sage)}
-.scale > div:nth-child(2)::before{background:var(--lime)}
-.scale > div:nth-child(3)::before{background:var(--plum)}
-.scale small{font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.scale h3{font-size:1.6rem;margin:8px 0 22px}
-.scale .fee{font-family:var(--serif);font-weight:300;font-size:3rem;line-height:1;color:var(--plum-deep)}
-.scale .fee span{display:block;font-family:var(--sans);font-size:.9rem;color:var(--muted);margin-top:10px}
+/* Fee scale — one connected timeline card (cream surface, soft shadow) */
+.fee-scale{background:var(--cream);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow-soft);padding:48px 44px}
+.fee-track{list-style:none;position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+.fee-track::before,.fee-track::after{content:"";position:absolute;left:0;right:0;top:8px;height:1px}
+.fee-track::before{background:var(--hairline-plum)}
+.fee-track::after{background:var(--plum)}
+.fee-stop{position:relative;padding-top:32px}
+.fee-stop-dot{position:absolute;left:0;top:8.5px;transform:translate(-50%,-50%);border-radius:50%}
+.fee-stop:nth-child(1) .fee-stop-dot{width:10px;height:10px;background:var(--cream);border:1.5px solid var(--sage)}
+.fee-stop:nth-child(2) .fee-stop-dot{width:14px;height:14px;background:var(--lime)}
+.fee-stop:nth-child(3) .fee-stop-dot{width:18px;height:18px;background:var(--plum)}
+.fee-stop small{display:block;font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.fee-stop h3{font-size:1.5rem;margin:8px 0 20px}
+.fee-stop .fee{display:block;font-size:2.8rem;line-height:1.1;color:var(--plum-deep)}
+.fee-stop .fee-note{display:block;font-family:var(--sans);font-size:.9rem;color:var(--muted);margin-top:8px}
+/* Track draws left to right, then the dots appear in sequence (static under reduced motion) */
+@media (prefers-reduced-motion:no-preference){
+  .fee-track::after{transform:scaleX(0);transform-origin:left;transition:transform 1.2s var(--ease)}
+  .fee-stop-dot{opacity:0;transform:translate(-50%,-50%) scale(.6);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+  .fee-stop:nth-child(1) .fee-stop-dot{transition-delay:.15s}
+  .fee-stop:nth-child(2) .fee-stop-dot{transition-delay:.55s}
+  .fee-stop:nth-child(3) .fee-stop-dot{transition-delay:.95s}
+  .fee-scale.fs-in .fee-track::after{transform:scaleX(1)}
+  .fee-scale.fs-in .fee-stop-dot{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
 .c-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:50px;margin-top:70px}
-.c-grid h4{font-size:1.5rem;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.c-grid h4{margin-bottom:20px}
+.c-intro{color:var(--muted);margin-bottom:10px;line-height:1.7;overflow:visible}
 .three li{display:flex;gap:16px;list-style:none;padding:7px 0;color:var(--body)}
 .three b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.2rem;line-height:1.4;color:var(--plum);min-width:24px}
+/* Rules list — neutral 5px dots in the muted token (not "positive" ticks) */
+.list-dots{list-style:none}
+.list-dots li{position:relative;padding:7px 0 7px 22px;color:var(--body)}
+.list-dots li::before{content:"";position:absolute;left:2px;top:17px;width:5px;height:5px;border-radius:50%;background:var(--muted)}
+/* Waived conditions — soft mint-tinted panel, check icons kept here only */
+.waived-panel{background:var(--sage-mist);border-radius:16px;padding:24px}
 
 /* About */
 .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:80px;align-items:start}
@@ -462,6 +549,7 @@ header.scrolled .logo img{height:46px}
 .cta-box p{color:var(--body);max-width:500px;margin:0 auto 40px}
 .cta-box .btn-ivory{background:var(--plum);color:#fff;box-shadow:0 14px 30px -16px rgba(116,48,94,.8)}
 .cta-box .btn-ivory:hover{background:var(--plum-deep)}
+.cta-actions{display:flex;justify-content:center;align-items:center;gap:16px;flex-wrap:wrap}
 .cta-box .cta-micro{font-size:.84rem;color:var(--muted);margin:26px auto 0;max-width:none}
 
 /* Footer — watermark bleeds off the cropped bottom edge */
@@ -509,15 +597,17 @@ footer a:hover{color:#fff}
   .hero-grid > div:first-child,.figure{grid-column:auto}
   .figure{order:-1;width:min(380px,88%)}
   .gold-row{grid-template-columns:1fr;gap:16px;padding:40px 34px}
+  .th-gold .gold-pair{grid-template-columns:1fr}
+  .th-head{grid-template-columns:1fr;gap:28px;align-items:start}
+  .th-head p{justify-self:start}
   .expect-steps{grid-template-columns:1fr;gap:32px}
   .meet-figure{width:min(340px,88%);justify-self:start}
-  .acc summary{grid-template-columns:44px 1fr 44px;padding:24px 24px}
-  .acc .s{display:none}
-  .acc .body{grid-template-columns:1fr;padding:0 24px 30px}
-  .acc .body > div{grid-column:1/-1}
-  .fees-l{position:static}
-  .scale,.c-grid{grid-template-columns:1fr}
-  .c-grid{gap:44px}
+  .tacc-btn{grid-template-columns:44px 1fr 1fr 44px;gap:16px;padding:24px 22px}
+  .tacc-grid{padding:0 22px 32px}
+  .fees-l,.avail{position:static}
+  /* Details columns: 2 + 1 on tablet (waived panel spans the full width) */
+  .c-grid{grid-template-columns:1fr 1fr;gap:44px}
+  .c-grid > div:last-child{grid-column:1/-1}
   .foot{grid-template-columns:1fr 1fr}
 }
 @media (max-width:640px){
@@ -526,8 +616,23 @@ footer a:hover{color:#fff}
   .hero-foot{grid-template-columns:1fr;gap:0}
   .hero-foot div{border-left:0;border-top:1px solid var(--hairline-plum);padding:32px 4px}
   .hero-foot div:first-child{border-top:0}
-  .foot{grid-template-columns:1fr}
-  .acc .body ul{columns:1}
+  .cols,.foot{grid-template-columns:1fr}
+  /* Details columns stack on mobile */
+  .c-grid{grid-template-columns:1fr}
+  .c-grid > div:last-child{grid-column:auto}
+  /* Fee scale goes vertical: track on the left, stops stacked */
+  .fee-scale{padding:36px 26px}
+  .fee-track{grid-template-columns:1fr;gap:36px}
+  .fee-track::before,.fee-track::after{left:8px;right:auto;top:4px;bottom:4px;width:1px;height:auto}
+  .fee-stop{padding:0 0 0 40px}
+  .fee-stop-dot{left:8.5px;top:10px}
+  .fee-stop .fee{font-size:2.4rem}
+  /* Taglines: hidden in the row below 640px, shown under the title instead */
+  .tacc-s{display:none}
+  .tacc-sub-m{display:block}
+  .tacc-btn{grid-template-columns:44px 1fr 44px;padding:22px 18px}
+  .tacc-grid{padding:0 18px 28px}
+  .tacc-text ul{columns:1}
   .price,.step,.avail{padding:36px 26px}
   .about-facts{grid-template-columns:1fr}
   .about-facts > div{display:flex;align-items:baseline;gap:14px;border-left:0;border-top:1px solid var(--hairline-plum);padding:14px 4px}
@@ -540,6 +645,10 @@ footer a:hover{color:#fff}
   .cta-box{padding:70px 24px;border-radius:28px}
   .faq-q{padding:22px 22px}
   .faq-item .disclose-inner > p{padding:0 22px 24px}
+}
+@media (prefers-reduced-motion:no-preference) and (max-width:640px){
+  .fee-track::after{transform:scaleY(0);transform-origin:top}
+  .fee-scale.fs-in .fee-track::after{transform:scaleY(1)}
 }
 /* Reminder timeline goes vertical on very narrow screens */
 @media (max-width:420px){

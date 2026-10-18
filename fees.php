@@ -1,15 +1,17 @@
 <?php
 require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/includes/site.php';
 
 $feeSteps   = get_rows('fee_steps');
 $bookingUrl = setting('booking_url');
 $pageTitle  = 'Costs & Appointments';
 
-// Single source of truth for fee figures — also drives the JS toggle via data-fee-config.
-// TODO: Confirm current fee and Medicare rebate amounts with the client.
+// Single source of truth for fee figures (shared site config) — also drives
+// the JS toggle via data-fee-config.
+$fees = site_fees();
 $feeConfig = [
-    'session' => 255.00,
-    'rebate'  => 101.55,
+    'session' => $fees['session'],
+    'rebate'  => $fees['rebate'],
 ];
 $feeConfig['gap'] = round($feeConfig['session'] - $feeConfig['rebate'], 2);
 
@@ -34,7 +36,7 @@ require __DIR__ . '/includes/header.php';
       <div><b class="numeral-display">50 min</b><span>/ session</span></div>
       <div><b class="numeral-display">$<?= number_format($feeConfig['gap'], 2) ?></b><span>after Medicare</span></div>
       <div><b class="numeral-display">10</b><span>rebated sessions / yr</span></div>
-      <div><b class="numeral-display">Fri – Sat</b><span>sessions</span></div>
+      <div><b class="numeral-display"><?= e(site_session_days(true)) ?></b><span>sessions</span></div>
     </div>
 
     <div class="fees-grid">
