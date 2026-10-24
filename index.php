@@ -59,7 +59,6 @@ require __DIR__ . '/includes/header.php';
     </div>
 
     <?php if ($heroStats): ?>
-    <!-- TODO: Consider replacing '2 gold-standard therapies' with a stronger stat. -->
     <div class="hero-foot rv" data-stats>
       <?php foreach ($heroStats as $stat): ?>
       <div><b class="numeral-display" data-count="<?= e($stat['stat_value']) ?>"><?= e($stat['stat_value']) ?></b><span><?= e($stat['stat_label']) ?></span></div>
@@ -188,11 +187,11 @@ require __DIR__ . '/includes/header.php';
       <!-- TODO: Confirm bio copy and credentials with the client. -->
       <h2>Care shaped by <em>experience</em></h2>
       <p class="meet-bio">Patricia is a trauma-focused psychologist dedicated to evidence-based care delivered with warmth and patience. <!-- TODO: placeholder bio --></p>
-      <p class="meet-bio">She works alongside you at a pace that feels safe, drawing on EMDR and trauma-focused CBT to help you move from surviving to living well. <!-- TODO: placeholder bio --></p>
+      <p class="meet-bio">She works alongside you at a pace that feels safe, drawing primarily on EMDR to help you move from surviving to living well. <!-- TODO: placeholder bio --></p>
       <ul class="meet-creds">
-        <li>Accredited EMDR Therapist <!-- TODO: confirm --></li>
-        <li>Registered Psychologist, AHPRA <!-- TODO: confirm --></li>
-        <li>Trauma-Focused CBT trained <!-- TODO: confirm --></li>
+        <li>Accredited EMDR Therapist</li>
+        <li>Registered Psychologist</li>
+        <li>15 years in practice — psychology is her fourth career</li>
       </ul>
       <a href="about.php" class="link">More about Patricia</a>
     </div>
