@@ -26,13 +26,12 @@ require __DIR__ . '/includes/header.php';
         <!-- TODO: Patricia to write: who I am, why trauma work, what sessions feel like. -->
         <p class="about-bio">I'm a trauma-focused psychologist, and this practice is built around one belief: healing happens at the pace that feels safe to you. <!-- TODO: placeholder bio --></p>
         <p class="about-bio">I came to trauma work because I saw how often people carry what happened to them alone. Evidence-based therapies like EMDR, offered with warmth and without hurry, can change that. <!-- TODO: placeholder bio --></p>
+        <p class="about-bio">Psychology is my fourth career — fifteen years in practice, with plenty of life experience to add to the therapeutic response.</p>
         <p class="about-bio">Sessions with me are gentle and unhurried — we go only as far as feels right, and you always set the pace. <!-- TODO: placeholder bio --></p>
         <div class="about-facts">
+          <div><b class="numeral-display">15</b><span>years in practice</span></div>
+          <div><b class="numeral-display">4th</b><span>career — a lifetime of experience</span></div>
           <div><b class="numeral-display">11</b><span>years of Enneagram study</span></div>
-          <!-- TODO: Confirm this fact with Patricia. -->
-          <div><b class="numeral-display">00+</b><span>years in practice</span></div>
-          <!-- TODO: Confirm this fact with Patricia. -->
-          <div><b class="numeral-display">0,000</b><span>sessions held</span></div>
         </div>
         <p class="signature" aria-hidden="true">Patricia</p>
       </div>
@@ -68,8 +67,6 @@ require __DIR__ . '/includes/header.php';
         <h4>Registered with</h4>
         <ul class="qual-list">
           <li>Psychology Board of Australia</li>
-          <!-- TODO: Add real AHPRA number; confirm whether NZ registration applies; the official NZ body is the 'New Zealand Psychologists Board'. -->
-          <li>AHPRA registration no. PSY0000000000</li>
           <li>Member, Australian Association of Psychologists Inc (AAPi)</li>
         </ul>
       </div>
@@ -116,16 +113,14 @@ require __DIR__ . '/includes/header.php';
 <section class="where">
   <div class="wrap">
     <div class="eyebrow rv"><b>iv.</b> Where we meet</div>
-    <!-- TODO: Confirm heading copy with the client. -->
-    <h2 class="rv">In the room, or <em>from home</em></h2>
+    <h2 class="rv">In the room, or <em>by telehealth</em></h2>
     <div class="wm-grid">
       <article class="wm-card" data-reveal>
         <span class="wm-ico" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
         </span>
         <h3>In person</h3>
-        <!-- TODO: Confirm suburb and parking notes. -->
-        <p>Sessions are held in [Suburb].</p>
+        <p>Sessions are held in rooms at Highgate Hill.</p>
         <ul class="wm-list">
           <li>Easy parking close by <!-- TODO: Confirm parking notes. --></li>
           <li>The gate code is sent in your reminder email &amp; text</li>
@@ -136,7 +131,7 @@ require __DIR__ . '/includes/header.php';
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
         </span>
         <h3>Telehealth</h3>
-        <p>Sessions via Zoom, from wherever you feel most comfortable.</p>
+        <p>Many sessions happen by telehealth — via Zoom, from wherever you feel most comfortable.</p>
         <ul class="wm-list">
           <li>Zoom is free to download</li>
           <li>Ear buds are recommended for better sound</li>

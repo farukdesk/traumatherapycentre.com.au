@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS settings (
 
 INSERT INTO settings (setting_key, setting_value) VALUES
 ('site_title', 'Trauma Therapy Centre'),
-('meta_description', 'Trauma therapy with Patricia — trained in EMDR and TF-CBT, the two gold standards of trauma treatment. Medicare, DVA, NDIS and telehealth available.'),
+('meta_description', 'Trauma therapy with Patricia — an accredited EMDR therapist with 15 years in practice. In person at Highgate Hill or via telehealth. Medicare, DVA and NDIS available.'),
 ('logo_url', 'https://traumatherapycentre.com.au/wp-content/uploads/2020/04/cropped-preview6.png'),
 ('favicon_url', 'https://traumatherapycentre.com.au/wp-content/uploads/2020/04/cropped-preview6.png'),
 ('booking_url', 'book.php'),
@@ -49,7 +49,7 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('hero_line1', 'A quiet place'),
 ('hero_line2', 'to <em>heal</em> & find'),
 ('hero_line3', 'your way <em>home.</em>'),
-('hero_lead', 'Trained in the two gold standards of trauma treatment — EMDR and Trauma-Focused CBT — with gentle, body-aware therapies woven in as each session unfolds.'),
+('hero_lead', 'An accredited EMDR therapist with fifteen years in practice — and gentle, body-aware therapies woven in as each session unfolds.'),
 ('hero_photo_url', 'https://traumatherapycentre.com.au/wp-content/uploads/2023/01/headshot-round-1200px-500x500.png'),
 ('hero_photo_alt', 'Patricia, psychologist at Trauma Therapy Centre'),
 ('hero_orbit_text', 'EMDR · Internal Family Systems · Brainspotting · iRest® · Expressive Arts · Schema ·'),
@@ -57,10 +57,10 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('hero_seal_bold', 'EMDR Therapist'),
 ('intro_heading', 'Therapy that changes the <em>way the brain</em> holds the past.'),
 ('intro_big', 'Every therapy offered here works by changing the brain''s neural networks — helping memories that once felt overwhelming settle into their rightful place.'),
-('intro_small', 'Sessions are grounded in the two gold standards of trauma care, with other approaches brought in gently depending on how each session is going. You never have to go faster than feels safe.'),
+('intro_small', 'Sessions are grounded in EMDR — a gold standard of trauma care — with other approaches brought in gently depending on how each session is going. You never have to go faster than feels safe.'),
 ('gold_heading', 'Two proven paths through <em>trauma.</em>'),
 ('gold_note_em', 'Recognised in the Phoenix Australia PTSD Guidelines.'),
-('gold_note_text', 'Other therapies may be woven in depending on how each session is going.'),
+('gold_note_text', 'EMDR is the approach used most often here — other therapies may be woven in depending on how each session is going.'),
 ('therapies_heading', 'Many paths, <em>one intention.</em>'),
 ('therapies_sub', 'Each approach is chosen to meet you where you are — and many work beautifully alongside one another.'),
 ('quote_text', 'Personal growth is an <em>inevitable</em> part of trauma work — and a journey worth taking in its <em>own right.</em>'),
@@ -74,8 +74,8 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('price_fine', 'The AAPi recommended fee for a psychologist is $340 for a standard 40–60 minute consultation (1 July 2026 – 30 June 2027). Sessions running over time are $60 per 15 minutes or part thereof. <strong>No bulk billing available.</strong>'),
 ('reminder_timeline', '2w:Email|1w:Email|3d:Email|24h:Text'),
 ('reminder_note', 'Four reminders, so you never miss a session. The gate code is in your email and text.'),
-('cancel_heading', 'Kindly give <em>three business days''</em> notice.'),
-('cancel_sub', 'If you''re unable to attend, letting me know early avoids a cancellation fee — and frees the time for someone waiting.'),
+('cancel_heading', 'Kindly give as much notice as you can — <em>at least three business days.</em>'),
+('cancel_sub', 'If you''re unable to attend, letting me know as early as possible avoids a cancellation fee — and frees the time for someone waiting.'),
 ('cancel_why_intro', 'A missed appointment is a loss for three people:'),
 ('cancel_why_items', 'You, delaying your own therapy progress
 A client on the waitlist who urgently needed that time
@@ -89,7 +89,7 @@ Extenuating circumstances or an emergency'),
 ('about_heading', 'Experienced, accredited & <em>here for you.</em>'),
 ('availability_note', '"You must be 18 years or older to receive assistance from me."'),
 ('cta_heading', 'When you''re ready, <em>we''ll begin gently</em> — together.'),
-('cta_text', 'Book online in a few moments, in person or via telehealth.'),
+('cta_text', 'Book online in a few moments — in person at Highgate Hill or via telehealth.'),
 ('footer_about', 'Trauma-focused psychological care in a calm, confidential and respectful space.'),
 ('footer_sessions_days', 'Tue · Thu · Sat'),
 ('footer_sessions_hours', '9:00 am – 1:00 pm'),
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS hero_stats (
 ) ENGINE=InnoDB;
 
 INSERT INTO hero_stats (stat_value, stat_label, sort_order) VALUES
-('2', 'Gold-standard trauma therapies', 1),
+('15', 'Years in practice', 1),
 ('10', 'Medicare-rebated sessions per year', 2),
 ('11', 'Years of Enneagram study', 3);
 
@@ -152,7 +152,9 @@ You don''t need to discuss the event in detail, though we do need to activate it
 ('02', 'TF-CBT', 'Trauma-Focused Cognitive Behavioural Therapy',
 'TF-CBT addresses the emotional, cognitive and behavioural symptoms of PTSD.
 
-It brings together psycho-education and symptom management with exposure therapy and cognitive therapy.', 2);
+It brings together psycho-education and symptom management with exposure therapy and cognitive therapy.
+
+Patricia is trained in TF-CBT, though most sessions draw primarily on EMDR.', 2);
 
 -- ---------------------------------------------------------------- therapies
 CREATE TABLE IF NOT EXISTS therapies (
