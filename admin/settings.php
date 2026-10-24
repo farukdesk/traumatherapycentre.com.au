@@ -131,6 +131,6 @@ require __DIR__ . '/includes/admin_header.php';
     </div>
   </details>
   <?php endforeach; ?>
-  <button type="submit" class="btn-primary">Save all settings</button>
+  <div class="save-bar"><button type="submit" class="btn-primary">Save all settings</button></div>
 </form>
 <?php require __DIR__ . '/includes/admin_footer.php'; ?>
