@@ -57,7 +57,10 @@ foreach (db()->query('SELECT status, COUNT(*) AS c FROM bookings GROUP BY status
 require __DIR__ . '/includes/admin_header.php';
 ?>
 <div class="page-head">
-  <h1>Bookings</h1>
+  <div>
+    <h1>Bookings</h1>
+    <p class="muted">Review requests, confirm appointments and keep clients updated — status changes email the client automatically.</p>
+  </div>
 </div>
 
 <div class="booking-filters">
@@ -93,11 +96,12 @@ require __DIR__ . '/includes/admin_header.php';
       <td class="booking-msg"><?= $b['message'] !== '' ? nl2br(e($b['message'])) : '<span class="muted">—</span>' ?></td>
       <td><?= e(date('j M Y, g:i a', strtotime($b['created_at']))) ?></td>
       <td>
-        <form method="post" action="bookings.php<?= $filter !== '' ? '?status=' . e($filter) : '' ?>" class="inline">
+        <span class="badge badge-<?= e($b['status']) ?>"><?= e($statuses[$b['status']] ?? $b['status']) ?></span>
+        <form method="post" action="bookings.php<?= $filter !== '' ? '?status=' . e($filter) : '' ?>" class="inline status-form">
           <?= csrf_field() ?>
           <input type="hidden" name="action" value="status">
           <input type="hidden" name="id" value="<?= (int) $b['id'] ?>">
-          <select name="status" onchange="this.form.submit()">
+          <select name="status" onchange="this.form.submit()" aria-label="Change status">
             <?php foreach ($statuses as $key => $label): ?>
             <option value="<?= e($key) ?>" <?= $b['status'] === $key ? 'selected' : '' ?>><?= e($label) ?></option>
             <?php endforeach; ?>
